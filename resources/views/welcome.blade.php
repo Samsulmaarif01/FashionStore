@@ -110,6 +110,12 @@
                 <div class="swiper-button-prev !text-black !left-0 !w-12 !h-12 bg-white rounded-full shadow-lg hidden md:flex after:!text-xl"></div>
                 <div class="swiper-button-next !text-black !right-0 !w-12 !h-12 bg-white rounded-full shadow-lg hidden md:flex after:!text-xl"></div>
             </div>
+
+            <div class="text-center mt-12 gsap-fade-up">
+                <a href="{{ route('collection') }}" class="inline-block px-10 py-4 bg-black text-white text-xs font-black uppercase tracking-[0.3em] hover:bg-indigo-600 transition-colors duration-300">
+                    Lihat Semua Produk
+                </a>
+            </div>
         </div>
     </section>
 

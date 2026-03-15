@@ -68,7 +68,22 @@
                         <input id="discount_percent" type="number" name="discount_percent" x-model="discount" min="0" max="100"
                             class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
                             placeholder="Contoh: 5">
-                        <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest" x-show="discount > 0">
+                        
+                        <!-- Discount Period -->
+                        <div class="grid grid-cols-2 gap-3 mt-3" x-show="discount > 0" x-cloak>
+                            <div>
+                                <label for="discount_start" class="block text-[10px] font-bold uppercase text-gray-500 mb-1">Mulai</label>
+                                <input type="date" name="discount_start" id="discount_start" value="{{ old('discount_start') }}"
+                                    class="w-full px-3 py-2 border border-gray-200 bg-gray-50 text-xs focus:outline-none focus:border-blue-500 transition-colors">
+                            </div>
+                            <div>
+                                <label for="discount_end" class="block text-[10px] font-bold uppercase text-gray-500 mb-1">Berakhir</label>
+                                <input type="date" name="discount_end" id="discount_end" value="{{ old('discount_end') }}"
+                                    class="w-full px-3 py-2 border border-gray-200 bg-gray-50 text-xs focus:outline-none focus:border-blue-500 transition-colors">
+                            </div>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400 mt-2 uppercase font-bold tracking-widest" x-show="discount > 0">
                             Harga Setelah Diskon: <span class="text-blue-600" x-text="'Rp ' + (price * (1 - (discount / 100))).toLocaleString('id-ID')"></span>
                         </p>
                     </div>
@@ -115,12 +130,18 @@
                     @error('description') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <!-- Is Active -->
-                <div class="md:col-span-2">
+                <!-- Is Active & Trending -->
+                <div class="md:col-span-2 flex flex-col gap-4">
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" name="is_active" value="1" {{ old('is_active', '1') ? 'checked' : '' }}
                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                         <span class="text-sm font-semibold text-gray-700">Produk Aktif (tampil di toko)</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" name="is_trending" value="1" {{ old('is_trending') ? 'checked' : '' }}
+                            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <span class="text-sm font-semibold text-gray-700 underline decoration-blue-500 underline-offset-4">Sedang Tren (tampil di slider Beranda)</span>
                     </label>
                 </div>
             </div>

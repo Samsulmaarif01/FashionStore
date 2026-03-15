@@ -46,11 +46,14 @@ class AdminController extends Controller
             'new_category' => ['nullable', 'string', 'max:255'],
             'price'        => ['required', 'numeric', 'min:0'],
             'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'discount_start'   => ['nullable', 'date'],
+            'discount_end'     => ['nullable', 'date', 'after_or_equal:discount_start'],
             'description'  => ['nullable', 'string'],
             'image'        => ['nullable', 'url', 'max:500'],
             'badge'        => ['nullable', 'string', 'max:50'],
             'stock'        => ['required', 'integer', 'min:0'],
             'is_active'    => ['boolean'],
+            'is_trending'  => ['boolean'],
         ]);
 
         // Handle new category creation
@@ -70,8 +73,9 @@ class AdminController extends Controller
 
         $validated['slug']      = Str::slug($validated['name']);
         $validated['is_active'] = $request->has('is_active');
+        $validated['is_trending'] = $request->has('is_trending');
 
-        Product::create($validated);
+        Product::updateOrCreate(['slug' => $validated['slug']], $validated);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -90,11 +94,14 @@ class AdminController extends Controller
             'new_category' => ['nullable', 'string', 'max:255'],
             'price'        => ['required', 'numeric', 'min:0'],
             'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'discount_start'   => ['nullable', 'date'],
+            'discount_end'     => ['nullable', 'date', 'after_or_equal:discount_start'],
             'description'  => ['nullable', 'string'],
             'image'        => ['nullable', 'url', 'max:500'],
             'badge'        => ['nullable', 'string', 'max:50'],
             'stock'        => ['required', 'integer', 'min:0'],
             'is_active'    => ['boolean'],
+            'is_trending'  => ['boolean'],
         ]);
 
         // Handle new category creation
@@ -114,6 +121,7 @@ class AdminController extends Controller
 
         $validated['slug']      = Str::slug($validated['name']);
         $validated['is_active'] = $request->has('is_active');
+        $validated['is_trending'] = $request->has('is_trending');
 
         $product->update($validated);
 

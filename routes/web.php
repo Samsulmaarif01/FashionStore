@@ -10,15 +10,19 @@ use Illuminate\Support\Str;
 // ── Public Routes ─────────────────────────────────────────────────────────────
 
 Route::get('/', function () {
-    $products = \App\Models\Product::where('is_active', true)->latest()->take(8)->get();
+    $products = \App\Models\Product::where('is_active', true)
+        ->where('is_trending', true)
+        ->latest()
+        ->take(8)
+        ->get();
 
-    // Fallback to static products if no DB products yet
+    // Fallback to static products if no trending products in DB
     if ($products->isEmpty()) {
         $products = collect([
-            (object)['name' => 'Jaket Velour Midnight', 'category' => 'Pakaian Luar', 'price' => 2850000, 'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Baru', 'slug' => 'jaket-velour-midnight', 'discount_percent' => 0],
-            (object)['name' => 'Blus Esensi Sutra', 'category' => 'Atasan', 'price' => 1350000, 'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop', 'slug' => 'blus-esensi-sutra', 'discount_percent' => 0],
-            (object)['name' => 'Mantel Parit Minimalis', 'category' => 'Pakaian Luar', 'price' => 3675000, 'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop', 'slug' => 'mantel-parit-minimalis', 'discount_percent' => 0],
-            (object)['name' => 'Rok Motif Abstrak', 'category' => 'Bawahan', 'price' => 1650000, 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Diskon', 'slug' => 'rok-motif-abstrak', 'discount_percent' => 0],
+            (object)['name' => 'Jaket Velour Midnight', 'category' => 'Pakaian Luar', 'price' => 2850000, 'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Baru', 'slug' => 'jaket-velour-midnight', 'discount_percent' => 0, 'discounted_price' => 2850000, 'is_discount_active' => false],
+            (object)['name' => 'Blus Esensi Sutra', 'category' => 'Atasan', 'price' => 1350000, 'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop', 'slug' => 'blus-esensi-sutra', 'discount_percent' => 0, 'discounted_price' => 1350000, 'is_discount_active' => false],
+            (object)['name' => 'Mantel Parit Minimalis', 'category' => 'Pakaian Luar', 'price' => 3675000, 'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop', 'slug' => 'mantel-parit-minimalis', 'discount_percent' => 0, 'discounted_price' => 3675000, 'is_discount_active' => false],
+            (object)['name' => 'Rok Motif Abstrak', 'category' => 'Bawahan', 'price' => 1650000, 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Diskon', 'slug' => 'rok-motif-abstrak', 'discount_percent' => 0, 'discounted_price' => 1650000, 'is_discount_active' => false],
         ]);
     }
 

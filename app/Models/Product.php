@@ -12,15 +12,37 @@ class Product extends Model
 
     protected $fillable = [
         'name', 'slug', 'category', 'category_id', 'price', 'discount_percent',
-        'description', 'image', 'badge', 'stock', 'is_active',
+        'discount_start', 'discount_end',
+        'description', 'image', 'badge', 'stock', 'is_active', 'is_trending',
+    ];
+
+    protected $casts = [
+        'discount_start' => 'date',
+        'discount_end'   => 'date',
+        'is_active'      => 'boolean',
+        'is_trending'    => 'boolean',
+        'price'          => 'integer',
+        'stock'          => 'integer',
     ];
 
     public function getDiscountedPriceAttribute()
     {
-        if ($this->discount_percent > 0) {
+        if ($this->is_discount_active) {
             return $this->price * (1 - ($this->discount_percent / 100));
         }
         return $this->price;
+    }
+
+    public function getIsDiscountActiveAttribute()
+    {
+        if ($this->discount_percent <= 0) return false;
+        
+        $today = now()->startOfDay();
+        
+        if ($this->discount_start && $today->lt($this->discount_start)) return false;
+        if ($this->discount_end && $today->gt($this->discount_end)) return false;
+
+        return true;
     }
 
     public function category_rel()
@@ -28,11 +50,7 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'price'     => 'integer',
-        'stock'     => 'integer',
-    ];
+
 
     protected static function boot()
     {

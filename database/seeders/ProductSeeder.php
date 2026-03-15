@@ -77,7 +77,7 @@ class ProductSeeder extends Seeder
                 'category_id' => $atasanId,
                 'price' => 850000,
                 'discount_percent' => 0,
-                'image' => 'https://images.unsplash.com/photo-1598033129183-c4f50c717658?q=80&w=1974&auto=format&fit=crop',
+                'image' => 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1760&auto=format&fit=crop',
                 'stock' => 25,
                 'description' => 'Kemeja linen ringan yang sejuk digunakan.'
             ],
@@ -118,7 +118,7 @@ class ProductSeeder extends Seeder
                 'category_id' => $aksesorisId,
                 'price' => 1750000,
                 'discount_percent' => 10,
-                'image' => 'https://images.unsplash.com/photo-1511499767390-a73350266627?q=80&w=1780&auto=format&fit=crop',
+                'image' => 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1780&auto=format&fit=crop',
                 'stock' => 15,
                 'description' => 'Kacamata aviator klasik untuk melengkapi gaya Anda.'
             ],
@@ -135,10 +135,11 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $productData) {
+        foreach ($products as $index => $productData) {
             $slug = Str::slug($productData['name']);
             $productData['slug'] = $slug;
             $productData['is_active'] = true;
+            $productData['is_trending'] = ($index % 2 == 0); // Mark some products as trending
             Product::updateOrCreate(['slug' => $slug], $productData);
         }
     }

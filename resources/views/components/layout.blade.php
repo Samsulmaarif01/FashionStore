@@ -39,6 +39,14 @@
     
     <x-navbar />
 
+    <!-- Main Content -->
+    <main class="flex-1 w-full overflow-x-hidden">
+        {{ $slot }}
+    </main>
+
+    <!-- Footer Component -->
+    @include('components.footer')
+
     <!-- Flash Notifications -->
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" 
         class="fixed top-24 right-6 z-[100] transition-all duration-500 ease-in-out">
@@ -59,14 +67,6 @@
             </div>
         @endif
     </div>
-
-    <!-- Main Content -->
-    <main class="flex-grow">
-        {{ $slot }}
-    </main>
-
-    <!-- Footer Component -->
-    <x-footer />
 
     <!-- JS Libraries (Loaded before Alpine to ensure immediate availability) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

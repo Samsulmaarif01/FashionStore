@@ -1,62 +1,94 @@
 <x-layout>
-    <div class="bg-gray-50 min-h-screen py-24">
+    <div class="bg-gray-50 min-h-screen py-12 md:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 gsap-fade-up">
-                <h1 class="text-5xl font-black tracking-tighter text-black uppercase">Keranjang Belanja</h1>
-                <div class="w-20 h-1.5 bg-indigo-600 mx-auto mt-6"></div>
+            <div class="mb-12 md:mb-16 gsap-fade-up">
+                <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-black uppercase leading-none">Keranjang</h1>
+                <div class="w-16 h-1.5 bg-indigo-600 mt-6"></div>
             </div>
 
             @if(count($cart) > 0)
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
                     <!-- Cart Items List -->
-                    <div class="lg:col-span-8 gsap-fade-up">
-                        <div class="bg-white shadow-xl overflow-hidden border border-gray-100">
-                            <table class="w-full text-left border-collapse">
+                    <div class="w-full lg:flex-1 gsap-fade-up">
+                        <div class="bg-white shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-gray-100 overflow-hidden">
+                            <!-- Mobile View Card Version -->
+                            <div class="block md:hidden divide-y divide-gray-50">
+                                @foreach($cart as $id => $details)
+                                    <div class="p-6">
+                                        <div class="flex gap-4">
+                                            <div class="w-24 h-32 bg-gray-50 overflow-hidden flex-shrink-0">
+                                                <img src="{{ $details['image'] }}" class="w-full h-full object-cover grayscale">
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex justify-between items-start">
+                                                    <a href="{{ route('product.detail', $details['slug']) }}" class="text-sm font-black text-black uppercase tracking-tight truncate pr-4">{{ $details['name'] }}</a>
+                                                    <form action="{{ route('cart.remove') }}" method="POST">
+                                                        @csrf @method('DELETE')
+                                                        <input type="hidden" name="id" value="{{ $id }}">
+                                                        <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Fashion Item</p>
+                                                <div class="mt-4 flex justify-between items-center">
+                                                    <div class="flex items-center gap-4 bg-gray-50 rounded-full px-4 py-1">
+                                                        <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] - 1 }})" class="text-gray-400 hover:text-black">-</button>
+                                                        <span class="text-xs font-black">{{ $details['quantity'] }}</span>
+                                                        <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] + 1 }})" class="text-gray-400 hover:text-black">+</button>
+                                                    </div>
+                                                    <span class="text-sm font-black text-indigo-600">Rp {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Desktop View Table Version -->
+                            <table class="hidden md:table w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-gray-50 border-b border-gray-100">
-                                        <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Produk</th>
-                                        <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Harga</th>
-                                        <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Jumlah</th>
-                                        <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Total</th>
-                                        <th class="px-6 py-4"></th>
+                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Produk</th>
+                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Harga</th>
+                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Jumlah</th>
+                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Total</th>
+                                        <th class="px-8 py-5"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($cart as $id => $details)
-                                        <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                                            <td class="px-6 py-6 font-medium">
-                                                <div class="flex items-center gap-4">
-                                                    <div class="w-20 h-24 bg-gray-100 overflow-hidden flex-shrink-0">
-                                                        <img src="{{ $details['image'] }}" alt="{{ $details['name'] }}" class="w-full h-full object-cover">
+                                        <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-all group">
+                                            <td class="px-8 py-8 font-medium">
+                                                <div class="flex items-center gap-6">
+                                                    <div class="w-20 h-28 bg-gray-100 overflow-hidden flex-shrink-0">
+                                                        <img src="{{ $details['image'] }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
                                                     </div>
                                                     <div>
-                                                        <a href="{{ route('product.detail', $details['slug']) }}" class="text-sm font-bold text-black hover:text-indigo-600 transition-colors uppercase tracking-tight">{{ $details['name'] }}</a>
-                                                        <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">Fashion Item</p>
+                                                        <a href="{{ route('product.detail', $details['slug']) }}" class="text-sm font-black text-black hover:text-indigo-600 transition-colors uppercase tracking-tight">{{ $details['name'] }}</a>
+                                                        <p class="text-[9px] text-gray-400 mt-1 uppercase font-bold tracking-[0.2em]">Fashion Item</p>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-6">
+                                            <td class="px-8 py-8">
                                                 <span class="text-sm font-bold text-gray-900 leading-none">Rp {{ number_format($details['price'], 0, ',', '.') }}</span>
                                             </td>
-                                            <td class="px-6 py-6">
-                                                <div class="flex items-center justify-center gap-3">
-                                                    <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] - 1 }})" class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-black hover:text-white transition-all focus:outline-none">-</button>
-                                                    <span class="text-sm font-black w-6 text-center">{{ $details['quantity'] }}</span>
-                                                    <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] + 1 }})" class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-black hover:text-white transition-all focus:outline-none">+</button>
+                                            <td class="px-8 py-8">
+                                                <div class="flex items-center justify-center gap-4 bg-gray-50 rounded-full px-4 py-2 w-max mx-auto">
+                                                    <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] - 1 }})" class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-black transition-all focus:outline-none">-</button>
+                                                    <span class="text-xs font-black w-4 text-center">{{ $details['quantity'] }}</span>
+                                                    <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] + 1 }})" class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-black transition-all focus:outline-none">+</button>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-6">
+                                            <td class="px-8 py-8">
                                                 <span class="text-sm font-black text-indigo-600 leading-none">Rp {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }}</span>
                                             </td>
-                                            <td class="px-6 py-6 text-right">
-                                                <form action="{{ route('cart.remove') }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
+                                            <td class="px-8 py-8 text-right">
+                                                <form action="{{ route('cart.remove') }}" method="POST" class="inline">
+                                                    @csrf @method('DELETE')
                                                     <input type="hidden" name="id" value="{{ $id }}">
-                                                    <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
+                                                    <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors bg-white hover:bg-red-50 p-2 rounded-full border border-transparent hover:border-red-100">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                                     </button>
                                                 </form>
                                             </td>
@@ -68,38 +100,33 @@
                     </div>
 
                     <!-- Summary -->
-                    <div class="lg:col-span-4 gsap-fade-up" style="animation-delay: 200ms;">
-                        <div class="bg-black text-white p-8 shadow-2xl sticky top-24">
-                            <h3 class="text-lg font-black uppercase tracking-[0.2em] mb-8 border-b border-gray-800 pb-4">Ringkasan Pesanan</h3>
+                    <div class="w-full lg:w-[400px] gsap-fade-up" style="animation-delay: 200ms;">
+                        <div class="bg-black text-white p-8 md:p-12 shadow-2xl relative">
+                            <h3 class="text-lg font-black uppercase tracking-[0.2em] mb-12 flex items-center gap-4">
+                                <span class="w-2 h-10 bg-indigo-600"></span>
+                                Total Bayar
+                            </h3>
                             
-                            <div class="space-y-6">
-                                <div class="flex justify-between text-gray-400">
-                                    <span class="text-xs font-bold uppercase tracking-widest">Subtotal</span>
-                                    <span class="font-bold">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                            <div class="space-y-8">
+                                <div class="flex justify-between items-center text-gray-500">
+                                    <span class="text-[10px] font-black uppercase tracking-widest">Subtotal</span>
+                                    <span class="text-sm font-bold text-white">Rp {{ number_format($total, 0, ',', '.') }}</span>
                                 </div>
-                                <div class="flex justify-between text-gray-400">
-                                    <span class="text-xs font-bold uppercase tracking-widest">Estimasi Pengiriman</span>
-                                    <span class="text-xs uppercase font-bold text-indigo-400">Gratis Seluruh Indonesia</span>
+                                <div class="flex justify-between items-center text-gray-500">
+                                    <span class="text-[10px] font-black uppercase tracking-widest">Pengiriman</span>
+                                    <span class="text-[10px] uppercase font-black text-indigo-400 tracking-widest">Gratis</span>
                                 </div>
-                                <div class="border-t border-gray-800 pt-6 mt-6">
+                                <div class="pt-10 mt-6 border-t border-white/10">
                                     <div class="flex justify-between items-end">
-                                        <span class="text-sm font-black uppercase tracking-[0.3em]">Total Tagihan</span>
-                                        <span class="text-2xl font-black text-indigo-400">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                                        <span class="text-xs font-black uppercase tracking-[0.3em] text-gray-400">Total</span>
+                                        <span class="text-4xl font-black text-white tracking-tighter">Rp {{ number_format($total, 0, ',', '.') }}</span>
                                     </div>
                                 </div>
                                 
-                                <button class="w-full bg-white text-black py-5 mt-10 font-black uppercase tracking-[0.3em] text-[10px] hover:bg-indigo-500 hover:text-white transition-all duration-300 shadow-xl">
-                                    Lanjut ke Pembayaran
-                                </button>
-                                
-                                <div class="mt-8 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                                    <div class="flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                        </svg>
-                                        Aman & Terenkripsi
-                                    </div>
-                                </div>
+                                <a href="{{ route('checkout.index') }}" class="block w-full bg-indigo-600 text-white py-6 mt-12 font-black text-center uppercase tracking-[0.4em] text-[10px] hover:bg-white hover:text-black transition-all duration-500 shadow-xl group flex items-center justify-center gap-4">
+                                    Proses Checkout
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -107,14 +134,12 @@
             @else
                 <div class="max-w-md mx-auto text-center py-24 bg-white shadow-xl border border-gray-100 gsap-fade-up">
                     <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                     </div>
-                    <h2 class="text-xl font-black text-black uppercase tracking-widest mb-4">Keranjang Anda Kosong</h2>
-                    <p class="text-gray-500 text-sm mb-10 px-8 font-light">Sepertinya Anda belum menambahkan produk apapun ke dalam keranjang belanja Anda.</p>
+                    <h2 class="text-xl font-black text-black uppercase tracking-widest mb-4">Kosong</h2>
+                    <p class="text-gray-500 text-sm mb-10 px-8 font-light">Keranjang Anda masih kosong.</p>
                     <a href="{{ route('collection') }}" class="inline-block bg-black text-white px-10 py-4 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-indigo-600 transition-all shadow-lg">
-                        Mulai Belanja Sekarang
+                        Mulai Belanja
                     </a>
                 </div>
             @endif

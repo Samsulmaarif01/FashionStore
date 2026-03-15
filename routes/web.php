@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -91,6 +92,12 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::patch('/profile/password', [MemberController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/photo',     [MemberController::class, 'updatePhoto'])->name('profile.photo');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 
 Route::post('/member/wishlist/toggle/{product}', [WishlistController::class, 'toggle'])->name('member.wishlist.toggle');

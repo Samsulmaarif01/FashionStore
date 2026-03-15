@@ -55,6 +55,18 @@ Route::get('/product/{slug}', function ($slug) {
     return view('product-detail', compact('product'));
 })->name('product.detail');
 
+Route::get('/tentang-kami', function () {
+    $about = \App\Models\About::first();
+    if (!$about) {
+        $about = (object)[
+            'title' => 'Tentang Kami',
+            'content' => 'Velour adalah destinasi utama untuk fesyen modern dan dinamis.',
+            'image' => 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070&auto=format&fit=crop'
+        ];
+    }
+    return view('about', compact('about'));
+})->name('about');
+
 // ── Breeze Dashboard redirect ─────────────────────────────────────────────────
 Route::get('/dashboard', function () {
     if (auth()->user()->isAdmin()) {
@@ -92,6 +104,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Members
     Route::get('/members', [AdminController::class, 'members'])->name('members');
+
+    // About Us
+    Route::get('/about', [AdminController::class, 'editAbout'])->name('about.edit');
+    Route::patch('/about', [AdminController::class, 'updateAbout'])->name('about.update');
 });
 
 // ── Breeze Profile Routes ─────────────────────────────────────────────────────

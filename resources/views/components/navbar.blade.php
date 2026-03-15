@@ -2,7 +2,7 @@
     $navItems = [
         ['label' => 'Belanja', 'url' => '#collection'],
         ['label' => 'Koleksi', 'url' => '#collection'],
-        ['label' => 'Tentang', 'url' => '#'],
+        ['label' => 'Tentang Kami', 'url' => route('about')],
         ['label' => 'Kontak Kami', 'url' => '#contact'],
     ];
 @endphp

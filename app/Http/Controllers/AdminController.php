@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\About;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -109,5 +110,33 @@ class AdminController extends Controller
     {
         $members = User::where('role', 'member')->latest()->paginate(15);
         return view('admin.members', compact('members'));
+    }
+
+    // ── About Us ──────────────────────────────────────────────────────────────
+
+    public function editAbout()
+    {
+        $about = About::first();
+        if (!$about) {
+            $about = About::create([
+                'title' => 'Tentang Kami',
+                'content' => 'Selamat datang di Velour.',
+            ]);
+        }
+        return view('admin.about', compact('about'));
+    }
+
+    public function updateAbout(Request $request)
+    {
+        $about = About::first();
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'image' => ['nullable', 'url', 'max:500'],
+        ]);
+
+        $about->update($validated);
+
+        return back()->with('success', 'Konten Tentang Kami berhasil diperbarui.');
     }
 }

@@ -113,6 +113,73 @@
         </div>
     </section>
 
+    <!-- Section Kontak Kami -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="gsap-fade-up">
+                    <h2 class="text-xs font-bold tracking-[0.3em] text-indigo-600 uppercase mb-3">Terhubung</h2>
+                    <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-black mb-6">Kontak Kami</h3>
+                    <p class="text-gray-600 mb-8 leading-relaxed max-w-md">
+                        Apakah Anda memiliki pertanyaan tentang koleksi kami atau membutuhkan bantuan dengan pesanan? Tim kami siap membantu Anda dengan layanan personal.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-none border border-gray-100 text-indigo-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-black uppercase tracking-wider text-sm">Butik Utama</h4>
+                                <p class="text-gray-500 text-sm">Jl. Mode No. 123, Jakarta Selatan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-none border border-gray-100 text-indigo-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-black uppercase tracking-wider text-sm">Email</h4>
+                                <p class="text-gray-500 text-sm">hello@velour.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gsap-fade-up bg-gray-50 p-8 md:p-12 border border-gray-100 relative overflow-hidden">
+                    <!-- Subtle decorative element -->
+                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-50 rounded-full opacity-50"></div>
+                    
+                    <form action="#" class="relative z-10 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Nama</label>
+                                <input type="text" class="w-full bg-white border-b border-gray-200 py-3 px-0 focus:outline-none focus:border-indigo-600 transition-colors text-sm" placeholder="Nama Anda">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Email</label>
+                                <input type="email" class="w-full bg-white border-b border-gray-200 py-3 px-0 focus:outline-none focus:border-indigo-600 transition-colors text-sm" placeholder="email@contoh.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Pesan</label>
+                            <textarea rows="4" class="w-full bg-white border-b border-gray-200 py-3 px-0 focus:outline-none focus:border-indigo-600 transition-colors text-sm resize-none" placeholder="Bagaimana kami bisa membantu?"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-black text-white font-bold py-4 uppercase tracking-[0.3em] text-xs hover:bg-indigo-600 transition-colors duration-300">
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Alpine.js & custom JS specifically for this page features can be in app.js or here -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {

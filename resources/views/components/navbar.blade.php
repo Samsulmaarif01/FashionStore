@@ -1,3 +1,12 @@
+@php
+    $navItems = [
+        ['label' => 'Belanja', 'url' => '#collection'],
+        ['label' => 'Koleksi', 'url' => '#collection'],
+        ['label' => 'Tentang', 'url' => '#'],
+        ['label' => 'Kontak Kami', 'url' => '#contact'],
+    ];
+@endphp
+
 <nav
     x-data="{ mobileMenuOpen: false, userMenuOpen: false }"
     class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-100"
@@ -11,12 +20,12 @@
                     V E L O U R
                 </a>
             </div>
-
+ 
             <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8 items-center">
-                @foreach (['Belanja', 'Koleksi', 'Tentang', 'Jurnal'] as $item)
-                    <a href="#" class="relative group text-gray-800 hover:text-black font-medium text-sm tracking-wide">
-                        {{ $item }}
+                @foreach ($navItems as $item)
+                    <a href="{{ $item['url'] }}" class="relative group text-gray-800 hover:text-black font-medium text-sm tracking-wide">
+                        {{ $item['label'] }}
                         <span class="absolute -bottom-1 left-0 w-full h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
                     </a>
                 @endforeach
@@ -170,8 +179,8 @@
             @click.stop
         >
             <div class="flex-1 px-6 space-y-6 overflow-y-auto">
-                @foreach (['Belanja', 'Koleksi', 'Tentang', 'Jurnal'] as $item)
-                    <a href="#" class="block text-2xl font-light text-gray-900 border-b border-gray-100 pb-4">{{ $item }}</a>
+                @foreach ($navItems as $item)
+                    <a href="{{ $item['url'] }}" @click="mobileMenuOpen = false" class="block text-2xl font-light text-gray-900 border-b border-gray-100 pb-4">{{ $item['label'] }}</a>
                 @endforeach
 
                 <div class="pt-4 border-t border-gray-100 space-y-3">

@@ -26,25 +26,52 @@
                 </div>
 
                 <!-- Category -->
-                <div>
-                    <label for="category" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                    <select id="category" name="category" required
-                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
-                        <option value="">-- Pilih Kategori --</option>
-                        @foreach (['Atasan', 'Bawahan', 'Pakaian Luar', 'Gaun', 'Aksesori', 'Sepatu'] as $cat)
-                            <option value="{{ $cat }}" {{ old('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
-                        @endforeach
-                    </select>
-                    @error('category') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <div class="md:col-span-2" x-data="{ isNewCategory: false }">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label for="category_id" class="block text-xs font-black uppercase tracking-wider text-gray-600">Kategori <span class="text-red-500">*</span></label>
+                        <button type="button" @click="isNewCategory = !isNewCategory" 
+                            class="text-[10px] font-bold uppercase tracking-widest text-indigo-600 hover:text-black transition-colors">
+                            <span x-show="!isNewCategory">+ Buat Baru</span>
+                            <span x-show="isNewCategory">× Pilih yang Ada</span>
+                        </button>
+                    </div>
+
+                    <div x-show="!isNewCategory">
+                        <select id="category_id" name="category_id" 
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
+                            <option value="">-- Pilih Kategori --</option>
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div x-show="isNewCategory" x-cloak>
+                        <input type="text" name="new_category" value="{{ old('new_category') }}"
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
+                            placeholder="Masukkan Nama Kategori Baru...">
+                        @error('new_category') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 <!-- Price -->
-                <div>
+                <div x-data="{ price: {{ old('price', 0) }}, discount: {{ old('discount_percent', 0) }} }">
                     <label for="price" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Harga (Rp) <span class="text-red-500">*</span></label>
-                    <input id="price" type="number" name="price" value="{{ old('price') }}" required min="0"
+                    <input id="price" type="number" name="price" x-model="price" required min="0"
                         class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
                         placeholder="1500000">
                     @error('price') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                    <div class="mt-4">
+                        <label for="discount_percent" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Diskon (%)</label>
+                        <input id="discount_percent" type="number" name="discount_percent" x-model="discount" min="0" max="100"
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
+                            placeholder="Contoh: 5">
+                        <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest" x-show="discount > 0">
+                            Harga Setelah Diskon: <span class="text-blue-600" x-text="'Rp ' + (price * (1 - (discount / 100))).toLocaleString('id-ID')"></span>
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Stock -->

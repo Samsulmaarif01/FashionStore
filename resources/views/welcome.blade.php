@@ -98,7 +98,7 @@
             <!-- Swiper Slider -->
             <div class="swiper trending-swiper relative gsap-fade-up">
                 <div class="swiper-wrapper">
-                    @foreach (array_merge($products, $products) as $product)
+                    @foreach ($products->concat($products) as $product)
                         <div class="swiper-slide h-auto pb-12">
                             <x-product-card :product="$product" />
                         </div>

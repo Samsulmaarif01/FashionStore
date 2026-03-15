@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\About;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -27,30 +28,48 @@ class AdminController extends Controller
 
     public function products()
     {
-        $products = Product::latest()->paginate(10);
+        $products = Product::with('category_rel')->latest()->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
     public function createProduct()
     {
-        return view('admin.products.create');
+        $categories = Category::all();
+        return view('admin.products.create', compact('categories'));
     }
 
     public function storeProduct(Request $request)
     {
         $validated = $request->validate([
-            'name'        => ['required', 'string', 'max:255'],
-            'category'    => ['required', 'string', 'max:100'],
-            'price'       => ['required', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string'],
-            'image'       => ['nullable', 'url', 'max:500'],
-            'badge'       => ['nullable', 'string', 'max:50'],
-            'stock'       => ['required', 'integer', 'min:0'],
-            'is_active'   => ['boolean'],
+            'name'         => ['required', 'string', 'max:255'],
+            'category_id'  => ['nullable', 'exists:categories,id'],
+            'new_category' => ['nullable', 'string', 'max:255'],
+            'price'        => ['required', 'numeric', 'min:0'],
+            'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'description'  => ['nullable', 'string'],
+            'image'        => ['nullable', 'url', 'max:500'],
+            'badge'        => ['nullable', 'string', 'max:50'],
+            'stock'        => ['required', 'integer', 'min:0'],
+            'is_active'    => ['boolean'],
         ]);
 
+        // Handle new category creation
+        if (!empty($validated['new_category'])) {
+            $newCat = Category::firstOrCreate(
+                ['name' => $validated['new_category']],
+                ['slug' => Str::slug($validated['new_category'])]
+            );
+            $validated['category_id'] = $newCat->id;
+            $validated['category'] = $newCat->name;
+        } elseif (!empty($validated['category_id'])) {
+            $category = Category::find($validated['category_id']);
+            $validated['category'] = $category->name;
+        } else {
+            return back()->withErrors(['category_id' => 'Kategori harus dipilih atau dibuat baru.'])->withInput();
+        }
+
         $validated['slug']      = Str::slug($validated['name']);
-        $validated['is_active'] = $request->boolean('is_active', true);
+        $validated['is_active'] = $request->has('is_active');
 
         Product::create($validated);
 
@@ -59,24 +78,42 @@ class AdminController extends Controller
 
     public function editProduct(Product $product)
     {
-        return view('admin.products.edit', compact('product'));
+        $categories = Category::all();
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     public function updateProduct(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'name'        => ['required', 'string', 'max:255'],
-            'category'    => ['required', 'string', 'max:100'],
-            'price'       => ['required', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string'],
-            'image'       => ['nullable', 'url', 'max:500'],
-            'badge'       => ['nullable', 'string', 'max:50'],
-            'stock'       => ['required', 'integer', 'min:0'],
-            'is_active'   => ['boolean'],
+            'name'         => ['required', 'string', 'max:255'],
+            'category_id'  => ['nullable', 'exists:categories,id'],
+            'new_category' => ['nullable', 'string', 'max:255'],
+            'price'        => ['required', 'numeric', 'min:0'],
+            'discount_percent' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'description'  => ['nullable', 'string'],
+            'image'        => ['nullable', 'url', 'max:500'],
+            'badge'        => ['nullable', 'string', 'max:50'],
+            'stock'        => ['required', 'integer', 'min:0'],
+            'is_active'    => ['boolean'],
         ]);
 
+        // Handle new category creation
+        if (!empty($validated['new_category'])) {
+            $newCat = Category::firstOrCreate(
+                ['name' => $validated['new_category']],
+                ['slug' => Str::slug($validated['new_category'])]
+            );
+            $validated['category_id'] = $newCat->id;
+            $validated['category'] = $newCat->name;
+        } elseif (!empty($validated['category_id'])) {
+            $category = Category::find($validated['category_id']);
+            $validated['category'] = $category->name;
+        } else {
+            return back()->withErrors(['category_id' => 'Kategori harus dipilih atau dibuat baru.'])->withInput();
+        }
+
         $validated['slug']      = Str::slug($validated['name']);
-        $validated['is_active'] = $request->boolean('is_active', true);
+        $validated['is_active'] = $request->has('is_active');
 
         $product->update($validated);
 
@@ -138,5 +175,49 @@ class AdminController extends Controller
         $about->update($validated);
 
         return back()->with('success', 'Konten Tentang Kami berhasil diperbarui.');
+    }
+
+    // ── Categories CRUD ────────────────────────────────────────────────────────
+    
+    public function categories()
+    {
+        $categories = Category::withCount('products')->latest()->get();
+        return view('admin.categories.index', compact('categories'));
+    }
+
+    public function storeCategory(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        Category::create($validated);
+
+        return back()->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+    public function updateCategory(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:categories,name,' . $category->id],
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        $category->update($validated);
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function destroyCategory(Category $category)
+    {
+        if ($category->products()->count() > 0) {
+            return back()->with('error', 'Kategori tidak bisa dihapus karena masih memiliki produk.');
+        }
+
+        $category->delete();
+        return back()->with('success', 'Kategori berhasil dihapus.');
     }
 }

@@ -66,7 +66,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-5 py-4 text-gray-600 text-xs font-medium">{{ $product->category }}</td>
+                                <td class="px-5 py-4 text-gray-600 text-xs font-medium">
+                                    {{ $product->category_rel->name ?? $product->category }}
+                                </td>
                                 <td class="px-5 py-4 font-bold text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                                 <td class="px-5 py-4">
                                     <span class="font-bold {{ $product->stock > 10 ? 'text-green-600' : ($product->stock > 0 ? 'text-amber-600' : 'text-red-600') }}">

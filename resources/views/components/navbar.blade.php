@@ -1,7 +1,7 @@
 @php
     $navItems = [
-        ['label' => 'Belanja', 'url' => '#collection'],
-        ['label' => 'Koleksi', 'url' => '#collection'],
+        ['label' => 'Beranda', 'url' => '/'],
+        ['label' => 'Koleksi', 'url' => route('collection')],
         ['label' => 'Tentang Kami', 'url' => route('about')],
         ['label' => 'Kontak Kami', 'url' => '#contact'],
     ];
@@ -32,13 +32,40 @@
             </div>
 
             <!-- Icons (Search / Cart / Auth) -->
-            <div class="flex items-center space-x-5">
-                <!-- Search Icon -->
-                <button class="text-gray-800 hover:text-indigo-600 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                </button>
+            <div class="flex items-center space-x-5" x-data="{ searchOpen: false }">
+                <!-- Search Icon & Modal -->
+                <div class="relative">
+                    <button @click="searchOpen = !searchOpen" class="text-gray-800 hover:text-indigo-600 transition-colors focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </button>
+
+                    <!-- Search Popup -->
+                    <div x-show="searchOpen" 
+                        @click.outside="searchOpen = false"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        class="absolute right-0 mt-4 w-72 md:w-96 bg-white p-4 shadow-2xl border border-gray-100 z-50"
+                        style="display: none;"
+                    >
+                        <form action="{{ route('collection') }}" method="GET" class="relative">
+                            <input 
+                                type="text" 
+                                name="q" 
+                                placeholder="Cari produk..." 
+                                class="w-full px-4 py-3 bg-gray-50 border-none focus:ring-2 focus:ring-black text-sm"
+                                autofocus
+                            >
+                            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
                 
                 <!-- Cart Icon -->
                 <button class="relative text-gray-800 hover:text-indigo-600 transition-colors group">

@@ -3,50 +3,44 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 // ── Public Routes ─────────────────────────────────────────────────────────────
 
 Route::get('/', function () {
-    $products = \App\Models\Product::where('is_active', true)->latest()->take(8)->get()->map(function ($p) {
-        return [
-            'name'        => $p->name,
-            'category'    => $p->category,
-            'price'       => $p->price,
-            'image'       => $p->image,
-            'badge'       => $p->badge,
-            'slug'        => $p->slug,
-        ];
-    })->toArray();
+    $products = \App\Models\Product::where('is_active', true)->latest()->take(8)->get();
 
     // Fallback to static products if no DB products yet
-    if (empty($products)) {
-        $products = [
-            ['name' => 'Jaket Velour Midnight', 'category' => 'Pakaian Luar', 'price' => 2850000, 'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Baru', 'slug' => 'jaket-velour-midnight'],
-            ['name' => 'Blus Esensi Sutra', 'category' => 'Atasan', 'price' => 1350000, 'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop', 'slug' => 'blus-esensi-sutra'],
-            ['name' => 'Mantel Parit Minimalis', 'category' => 'Pakaian Luar', 'price' => 3675000, 'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop', 'slug' => 'mantel-parit-minimalis'],
-            ['name' => 'Rok Motif Abstrak', 'category' => 'Bawahan', 'price' => 1650000, 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Diskon', 'slug' => 'rok-motif-abstrak'],
-        ];
+    if ($products->isEmpty()) {
+        $products = collect([
+            (object)['name' => 'Jaket Velour Midnight', 'category' => 'Pakaian Luar', 'price' => 2850000, 'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Baru', 'slug' => 'jaket-velour-midnight', 'discount_percent' => 0],
+            (object)['name' => 'Blus Esensi Sutra', 'category' => 'Atasan', 'price' => 1350000, 'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop', 'slug' => 'blus-esensi-sutra', 'discount_percent' => 0],
+            (object)['name' => 'Mantel Parit Minimalis', 'category' => 'Pakaian Luar', 'price' => 3675000, 'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop', 'slug' => 'mantel-parit-minimalis', 'discount_percent' => 0],
+            (object)['name' => 'Rok Motif Abstrak', 'category' => 'Bawahan', 'price' => 1650000, 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Diskon', 'slug' => 'rok-motif-abstrak', 'discount_percent' => 0],
+        ]);
     }
 
     return view('welcome', compact('products'));
 });
 
+Route::get('/koleksi', [ProductController::class, 'index'])->name('collection');
+
 Route::get('/product/{slug}', function ($slug) {
     // Try DB first
     $dbProduct = \App\Models\Product::where('slug', $slug)->where('is_active', true)->first();
     if ($dbProduct) {
-        $product = $dbProduct->toArray();
+        $product = $dbProduct;
         return view('product-detail', compact('product'));
     }
 
     // Fallback static
     $products = [
-        ['name' => 'Jaket Velour Midnight', 'category' => 'Pakaian Luar', 'price' => 2850000, 'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Baru', 'description' => 'Miliki pakaian istimewa ini, dibuat dengan presisi dan dedikasi pada keanggunan modern.'],
-        ['name' => 'Blus Esensi Sutra', 'category' => 'Atasan', 'price' => 1350000, 'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop', 'description' => 'Blus sutra premium dengan sentuhan esensi minimalis.'],
-        ['name' => 'Mantel Parit Minimalis', 'category' => 'Pakaian Luar', 'price' => 3675000, 'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop', 'description' => 'Mantel parit (Trench Coat) bergaya minimalis klasik yang tahan lama.'],
-        ['name' => 'Rok Motif Abstrak', 'category' => 'Bawahan', 'price' => 1650000, 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Diskon', 'description' => 'Tingkatkan gaya urban Anda dengan Rok Motif Abstrak ini.'],
+        (object)['name' => 'Jaket Velour Midnight', 'category' => 'Pakaian Luar', 'price' => 2850000, 'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Baru', 'description' => 'Miliki pakaian istimewa ini, dibuat dengan presisi dan dedikasi pada keanggunan modern.', 'discount_percent' => 0],
+        (object)['name' => 'Blus Esensi Sutra', 'category' => 'Atasan', 'price' => 1350000, 'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop', 'description' => 'Blus sutra premium dengan sentuhan esensi minimalis.', 'discount_percent' => 0],
+        (object)['name' => 'Mantel Parit Minimalis', 'category' => 'Pakaian Luar', 'price' => 3675000, 'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop', 'description' => 'Mantel parit (Trench Coat) bergaya minimalis klasik yang tahan lama.', 'discount_percent' => 0],
+        (object)['name' => 'Rok Motif Abstrak', 'category' => 'Bawahan', 'price' => 1650000, 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop', 'badge' => 'Diskon', 'description' => 'Tingkatkan gaya urban Anda dengan Rok Motif Abstrak ini.', 'discount_percent' => 0],
     ];
 
     $product = collect($products)->first(fn ($item) => Str::slug($item['name']) === $slug);
@@ -108,6 +102,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // About Us
     Route::get('/about', [AdminController::class, 'editAbout'])->name('about.edit');
     Route::patch('/about', [AdminController::class, 'updateAbout'])->name('about.update');
+
+    // Categories
+    Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
+    Route::post('/categories', [AdminController::class, 'storeCategory'])->name('categories.store');
+    Route::patch('/categories/{category}', [AdminController::class, 'updateCategory'])->name('categories.update');
+    Route::delete('/categories/{category}', [AdminController::class, 'destroyCategory'])->name('categories.destroy');
 });
 
 // ── Breeze Profile Routes ─────────────────────────────────────────────────────

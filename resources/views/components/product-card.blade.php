@@ -2,23 +2,27 @@
 
 <div class="product-card group relative bg-white flex flex-col overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
     <!-- Stretched Link to Detail Page -->
-    <a href="{{ route('product.detail', $product['slug'] ?? \Illuminate\Support\Str::slug($product['name'])) }}" class="absolute inset-0 z-10 w-full h-full">
-        <span class="sr-only">Lihat detail {{ $product['name'] }}</span>
+    <a href="{{ route('product.detail', $product->slug) }}" class="absolute inset-0 z-10 w-full h-full">
+        <span class="sr-only">Lihat detail {{ $product->name }}</span>
     </a>
 
     <!-- Image Section -->
     <div class="relative w-full aspect-[4/5] bg-gray-100 overflow-hidden">
         <!-- New/Sale Badge -->
-        @if(isset($product['badge']))
-            <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md animate-pulse">
-                {{ $product['badge'] }}
+        @if($product->discount_percent > 0)
+            <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md">
+                DISKON {{ $product->discount_percent }}%
+            </span>
+        @elseif(isset($product->badge))
+            <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md">
+                {{ $product->badge }}
             </span>
         @endif
 
         <!-- Image -->
         <img 
-            src="{{ $product['image'] }}" 
-            alt="{{ $product['name'] }}" 
+            src="{{ $product->image }}" 
+            alt="{{ $product->name }}" 
             class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
         />
 
@@ -35,12 +39,22 @@
 
     <!-- Product Info Section -->
     <div class="p-6 flex flex-col flex-1">
-        <h3 class="text-sm text-gray-500 font-medium tracking-wide uppercase mb-1">{{ $product['category'] }}</h3>
-        <a href="{{ route('product.detail', $product['slug'] ?? \Illuminate\Support\Str::slug($product['name'])) }}" class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 relative z-20">
-            {{ $product['name'] }}
+        <h3 class="text-sm text-gray-500 font-medium tracking-wide uppercase mb-1">{{ $product->category_rel->name ?? $product->category }}</h3>
+        <a href="{{ route('product.detail', $product->slug) }}" class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 relative z-20">
+            {{ $product->name }}
         </a>
         <div class="mt-auto pt-4 flex items-center justify-between">
-            <span class="text-lg font-semibold text-black">Rp {{ number_format($product['price'], 0, ',', '.') }}</span>
+            <div class="flex flex-col">
+                @if($product->discount_percent > 0)
+                    <span class="text-[11px] text-gray-400 line-through">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg font-black text-blue-600">Rp {{ number_format($product->discounted_price, 0, ',', '.') }}</span>
+                        <span class="text-[10px] font-bold text-blue-100 bg-blue-600 px-1.5 py-0.5 rounded">-{{ $product->discount_percent }}%</span>
+                    </div>
+                @else
+                    <span class="text-lg font-black text-black">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                @endif
+            </div>
             
             <!-- Quick View Icon -->
             <button class="text-gray-400 hover:text-indigo-600 transition-colors duration-300 relative z-20 cursor-pointer">

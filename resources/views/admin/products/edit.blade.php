@@ -26,23 +26,49 @@
                 </div>
 
                 <!-- Category -->
-                <div>
-                    <label for="category" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                    <select id="category" name="category" required
-                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
-                        @foreach (['Atasan', 'Bawahan', 'Pakaian Luar', 'Gaun', 'Aksesori', 'Sepatu'] as $cat)
-                            <option value="{{ $cat }}" {{ old('category', $product->category) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
-                        @endforeach
-                    </select>
-                    @error('category') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <div class="md:col-span-2" x-data="{ isNewCategory: false }">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label for="category_id" class="block text-xs font-black uppercase tracking-wider text-gray-600">Kategori <span class="text-red-500">*</span></label>
+                        <button type="button" @click="isNewCategory = !isNewCategory" 
+                            class="text-[10px] font-bold uppercase tracking-widest text-indigo-600 hover:text-black transition-colors">
+                            <span x-show="!isNewCategory">+ Buat Baru</span>
+                            <span x-show="isNewCategory">× Pilih yang Ada</span>
+                        </button>
+                    </div>
+
+                    <div x-show="!isNewCategory">
+                        <select id="category_id" name="category_id" 
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div x-show="isNewCategory" x-cloak>
+                        <input type="text" name="new_category" value="{{ old('new_category') }}"
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
+                            placeholder="Masukkan Nama Kategori Baru...">
+                        @error('new_category') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 <!-- Price -->
-                <div>
+                <div x-data="{ price: {{ old('price', $product->price) }}, discount: {{ old('discount_percent', $product->discount_percent) }} }">
                     <label for="price" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Harga (Rp) <span class="text-red-500">*</span></label>
-                    <input id="price" type="number" name="price" value="{{ old('price', $product->price) }}" required min="0"
+                    <input id="price" type="number" name="price" x-model="price" required min="0"
                         class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
                     @error('price') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                    <div class="mt-4">
+                        <label for="discount_percent" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Diskon (%)</label>
+                        <input id="discount_percent" type="number" name="discount_percent" x-model="discount" min="0" max="100"
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
+                        <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest" x-show="discount > 0">
+                            Harga Setelah Diskon: <span class="text-blue-600" x-text="'Rp ' + (price * (1 - (discount / 100))).toLocaleString('id-ID')"></span>
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Stock -->
@@ -109,16 +135,20 @@
                 <a href="{{ route('admin.products') }}" class="px-6 py-3 border border-gray-200 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-black hover:text-black transition-colors">
                     Batal
                 </a>
-                <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="ml-auto"
-                    onsubmit="return confirm('Yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="px-6 py-3 border border-red-200 text-xs font-bold uppercase tracking-wider text-red-600 hover:bg-red-50 hover:border-red-400 transition-colors">
-                        Hapus Produk
-                    </button>
-                </form>
             </div>
         </form>
+
+        <div class="mt-8 pt-6 border-t border-gray-100">
+            <h4 class="text-xs font-black uppercase tracking-widest text-red-600 mb-3">Zona Berbahaya</h4>
+            <form method="POST" action="{{ route('admin.products.destroy', $product) }}" 
+                onsubmit="return confirm('Yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-6 py-3 border border-red-200 text-[10px] font-bold uppercase tracking-widest text-red-600 hover:bg-red-50 hover:border-red-400 transition-colors">
+                    Hapus Produk Secara Permanen
+                </button>
+            </form>
+        </div>
     </div>
 
     <script>

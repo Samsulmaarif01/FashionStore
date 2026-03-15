@@ -34,6 +34,27 @@
         </div>
     </header>
 
+    <!-- Flash Notifications -->
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" 
+        class="fixed top-24 right-6 z-[100] transition-all duration-500 ease-in-out">
+        @if(session('success'))
+            <div class="bg-black text-white px-6 py-4 flex items-center gap-4 shadow-2xl border-l-4 border-indigo-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="text-xs font-black uppercase tracking-widest">{{ session('success') }}</span>
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="bg-red-600 text-white px-6 py-4 flex items-center gap-4 shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span class="text-xs font-black uppercase tracking-widest">{{ session('error') }}</span>
+            </div>
+        @endif
+    </div>
+
     <div class="flex flex-1">
         <!-- Sidebar -->
         <aside class="w-60 bg-white border-r border-gray-100 hidden md:flex flex-col min-h-full shadow-sm">
@@ -56,6 +77,7 @@
                 @php
                     $navItems = [
                         ['label' => 'Dashboard', 'route' => 'member.dashboard', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />'],
+                        ['label' => 'Wishlist', 'route' => 'member.wishlist', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />'],
                         ['label' => 'Pesanan Saya', 'route' => 'member.orders', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />'],
                         ['label' => 'Pengaturan', 'route' => 'member.settings', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />'],
                     ];
@@ -92,6 +114,10 @@
                 <a href="{{ route('member.dashboard') }}"
                     class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.dashboard') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
                     Dashboard
+                </a>
+                <a href="{{ route('member.wishlist') }}"
+                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.wishlist') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
+                    Wishlist
                 </a>
                 <a href="{{ route('member.orders') }}"
                     class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.orders') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">

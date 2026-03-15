@@ -90,11 +90,21 @@
                 </div>
 
                 <!-- Stock -->
-                <div>
-                    <label for="stock" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Stok <span class="text-red-500">*</span></label>
-                    <input id="stock" type="number" name="stock" value="{{ old('stock', 0) }}" required min="0"
-                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors">
-                    @error('stock') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="stock" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5">Stok <span class="text-red-500">*</span></label>
+                        <input id="stock" type="number" name="stock" value="{{ old('stock', 0) }}" required min="0"
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
+                            placeholder="0">
+                        @error('stock') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label for="low_stock_threshold" class="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1.5" title="Peringatan saat stok mencapai angka ini">Ambang Stok Rendah</label>
+                        <input id="low_stock_threshold" type="number" name="low_stock_threshold" value="{{ old('low_stock_threshold', 5) }}" min="0"
+                            class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
+                            placeholder="5">
+                        @error('low_stock_threshold') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 <!-- Badge -->

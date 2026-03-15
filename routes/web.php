@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -28,6 +30,12 @@ Route::get('/', function () {
 
     return view('welcome', compact('products'));
 });
+
+// Cart Routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::get('/koleksi', [ProductController::class, 'index'])->name('collection');
 
@@ -82,7 +90,10 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::patch('/profile/update',   [MemberController::class, 'updateProfile'])->name('profile.update');
     Route::patch('/profile/password', [MemberController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/photo',     [MemberController::class, 'updatePhoto'])->name('profile.photo');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
 });
+
+Route::post('/member/wishlist/toggle/{product}', [WishlistController::class, 'toggle'])->name('member.wishlist.toggle');
 
 // ── Admin Routes ──────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

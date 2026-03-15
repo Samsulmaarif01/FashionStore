@@ -81,16 +81,45 @@
                         </div>
                     </div>
 
+                    <!-- Stock Status -->
+                    <div class="mb-6">
+                        @if($productObj->stock <= 0)
+                            <div class="inline-flex items-center px-4 py-2 bg-red-50 border border-red-200 text-red-600 font-bold uppercase tracking-widest text-[10px] italic">
+                                Stok Habis - Produk sedang kosong
+                            </div>
+                        @elseif($productObj->stock <= ($productObj->low_stock_threshold ?? 5))
+                            <div class="inline-flex items-center px-4 py-2 bg-orange-50 border border-orange-200 text-orange-600 font-bold uppercase tracking-widest text-[10px] animate-pulse">
+                                Stok Terbatas: Tersisa {{ $productObj->stock }} Produk
+                            </div>
+                        @else
+                            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                Stok Tersedia: {{ $productObj->stock }}
+                            </div>
+                        @endif
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 mb-10">
-                        <button class="flex-1 bg-black text-white py-5 px-8 font-black uppercase tracking-widest text-[10px] hover:bg-indigo-600 transition-all duration-300 shadow-xl">
-                            Tambah ke Keranjang
-                        </button>
-                        <button class="w-full sm:w-16 h-16 items-center justify-center flex border border-gray-100 text-gray-300 hover:text-red-500 hover:border-red-500 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
+                        @if($productObj->stock > 0)
+                            <form action="{{ route('cart.add', $productObj) }}" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit" class="w-full bg-black text-white py-5 px-8 font-black uppercase tracking-widest text-[10px] hover:bg-indigo-600 transition-all duration-300 shadow-xl cursor-pointer">
+                                    Tambah ke Keranjang
+                                </button>
+                            </form>
+                        @else
+                            <button disabled class="flex-1 bg-gray-100 text-gray-400 py-5 px-8 font-black uppercase tracking-widest text-[10px] cursor-not-allowed">
+                                Stok Kosong
+                            </button>
+                        @endif
+                        <form action="{{ route('member.wishlist.toggle', $productObj) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full sm:w-16 h-16 items-center justify-center flex border {{ auth()->check() && auth()->user()->wishlists()->where('product_id', $productObj->id)->exists() ? 'border-red-200 bg-red-50 text-red-500' : 'border-gray-100 text-gray-300' }} hover:text-red-500 hover:border-red-500 transition-all cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="{{ auth()->check() && auth()->user()->wishlists()->where('product_id', $productObj->id)->exists() ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                        </form>
                     </div>
 
                     <!-- Extra Info -->

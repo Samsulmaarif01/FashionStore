@@ -13,7 +13,7 @@ class Product extends Model
     protected $fillable = [
         'name', 'slug', 'category', 'category_id', 'price', 'discount_percent',
         'discount_start', 'discount_end',
-        'description', 'image', 'badge', 'stock', 'is_active', 'is_trending',
+        'description', 'image', 'badge', 'stock', 'low_stock_threshold', 'is_active', 'is_trending',
     ];
 
     protected $casts = [
@@ -23,6 +23,7 @@ class Product extends Model
         'is_trending'    => 'boolean',
         'price'          => 'integer',
         'stock'          => 'integer',
+        'low_stock_threshold' => 'integer',
     ];
 
     public function getDiscountedPriceAttribute()
@@ -43,6 +44,16 @@ class Product extends Model
         if ($this->discount_end && $today->gt($this->discount_end)) return false;
 
         return true;
+    }
+
+    public function getIsLowStockAttribute()
+    {
+        return $this->stock > 0 && $this->stock <= $this->low_stock_threshold;
+    }
+
+    public function getIsOutOfStockAttribute()
+    {
+        return $this->stock <= 0;
     }
 
     public function category_rel()

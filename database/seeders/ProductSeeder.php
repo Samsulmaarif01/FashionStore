@@ -68,7 +68,8 @@ class ProductSeeder extends Seeder
                 'discount_percent' => 15,
                 'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop',
                 'badge' => 'Diskon',
-                'stock' => 12,
+                'stock' => 3,
+                'low_stock_threshold' => 5,
                 'description' => 'Rok dengan motif abstrak yang artistik dan modern.'
             ],
             [
@@ -78,7 +79,8 @@ class ProductSeeder extends Seeder
                 'price' => 850000,
                 'discount_percent' => 0,
                 'image' => 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1760&auto=format&fit=crop',
-                'stock' => 25,
+                'stock' => 0,
+                'low_stock_threshold' => 5,
                 'description' => 'Kemeja linen ringan yang sejuk digunakan.'
             ],
             [

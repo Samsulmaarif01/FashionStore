@@ -29,12 +29,7 @@
         <!-- Dark Overlay -->
         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 ease-in-out"></div>
 
-        <!-- Add to Cart Button (Hidden by default, slides up on hover) -->
-        <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out z-20 relative">
-            <button class="w-full bg-white text-black py-3 font-semibold text-sm hover:bg-black hover:text-white transition-colors duration-300 shadow-lg relative z-30 cursor-pointer">
-                Tambah ke Keranjang
-            </button>
-        </div>
+
     </div>
 
     <!-- Product Info Section -->
@@ -56,13 +51,43 @@
                 @endif
             </div>
             
-            <!-- Quick View Icon -->
-            <button class="text-gray-400 hover:text-indigo-600 transition-colors duration-300 relative z-20 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-            </button>
+
+        </div>
+
+        <!-- Product Stock Status -->
+        <div class="mt-2 flex items-center justify-between">
+            <div class="text-[10px] font-bold uppercase tracking-wider">
+                @if($product->is_out_of_stock)
+                    <span class="text-red-600 bg-red-50 px-2 py-0.5 border border-red-100 italic">Produk Habis</span>
+                @elseif($product->is_low_stock)
+                    <span class="text-red-600 animate-pulse">Tersisa {{ $product->stock }}</span>
+                @else
+                    <span class="text-gray-400">Stok: {{ $product->stock }}</span>
+                @endif
+            </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-3">
+            @if($product->is_out_of_stock)
+                <button disabled class="flex-1 bg-gray-200 text-gray-400 py-3 text-[10px] font-black uppercase tracking-widest cursor-not-allowed">
+                    Produk Kosong
+                </button>
+            @else
+                <form action="{{ route('cart.add', $product) }}" method="POST" class="flex-1">
+                    @csrf
+                    <button type="submit" class="w-full bg-black text-white py-3 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors duration-300 relative z-20 cursor-pointer">
+                        Tambah ke Keranjang
+                    </button>
+                </form>
+            @endif
+            <form action="{{ route('member.wishlist.toggle', $product) }}" method="POST" class="relative z-20">
+                @csrf
+                <button type="submit" class="p-3 border border-gray-200 {{ auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-400' }} hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="{{ auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </button>
+            </form>
         </div>
     </div>
 </div>

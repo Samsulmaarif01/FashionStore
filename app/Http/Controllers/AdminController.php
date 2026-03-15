@@ -52,6 +52,7 @@ class AdminController extends Controller
             'image'        => ['nullable', 'url', 'max:500'],
             'badge'        => ['nullable', 'string', 'max:50'],
             'stock'        => ['required', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
             'is_active'    => ['boolean'],
             'is_trending'  => ['boolean'],
         ]);
@@ -74,6 +75,8 @@ class AdminController extends Controller
         $validated['slug']      = Str::slug($validated['name']);
         $validated['is_active'] = $request->has('is_active');
         $validated['is_trending'] = $request->has('is_trending');
+
+        $validated['low_stock_threshold'] = $validated['low_stock_threshold'] ?? 5;
 
         Product::updateOrCreate(['slug' => $validated['slug']], $validated);
 
@@ -100,6 +103,7 @@ class AdminController extends Controller
             'image'        => ['nullable', 'url', 'max:500'],
             'badge'        => ['nullable', 'string', 'max:50'],
             'stock'        => ['required', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
             'is_active'    => ['boolean'],
             'is_trending'  => ['boolean'],
         ]);
@@ -122,6 +126,7 @@ class AdminController extends Controller
         $validated['slug']      = Str::slug($validated['name']);
         $validated['is_active'] = $request->has('is_active');
         $validated['is_trending'] = $request->has('is_trending');
+        $validated['low_stock_threshold'] = $validated['low_stock_threshold'] ?? 5;
 
         $product->update($validated);
 

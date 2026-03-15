@@ -44,7 +44,7 @@
             <div class="flex justify-between items-end mb-16">
                 <div class="gsap-fade-up">
                     <h2 class="text-xs font-bold tracking-[0.3em] text-indigo-600 uppercase mb-3">Pilihan Terkurasi</h2>
-                    <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-black">Produk Baru</h3>
+                    <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-black">Produk Unggulan</h3>
                 </div>
                 <div class="hidden md:block gsap-fade-up">
                     <a href="#" class="text-sm font-semibold text-black uppercase tracking-widest border-b-2 border-transparent hover:border-black transition-colors duration-300 pb-1">

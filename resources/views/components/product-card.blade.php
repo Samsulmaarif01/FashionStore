@@ -2,7 +2,7 @@
 
 <div class="product-card group relative bg-white flex flex-col overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
     <!-- Stretched Link to Detail Page -->
-    <a href="{{ route('product.detail', \Illuminate\Support\Str::slug($product['name'])) }}" class="absolute inset-0 z-10 w-full h-full">
+    <a href="{{ route('product.detail', $product['slug'] ?? \Illuminate\Support\Str::slug($product['name'])) }}" class="absolute inset-0 z-10 w-full h-full">
         <span class="sr-only">Lihat detail {{ $product['name'] }}</span>
     </a>
 
@@ -36,7 +36,7 @@
     <!-- Product Info Section -->
     <div class="p-6 flex flex-col flex-1">
         <h3 class="text-sm text-gray-500 font-medium tracking-wide uppercase mb-1">{{ $product['category'] }}</h3>
-        <a href="{{ route('product.detail', \Illuminate\Support\Str::slug($product['name'])) }}" class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 relative z-20">
+        <a href="{{ route('product.detail', $product['slug'] ?? \Illuminate\Support\Str::slug($product['name'])) }}" class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 relative z-20">
             {{ $product['name'] }}
         </a>
         <div class="mt-auto pt-4 flex items-center justify-between">

@@ -36,37 +36,8 @@
         </div>
     </section>
 
-    <!-- Featured Products Grid -->
-    @php
-        $products = [
-            [
-                'name' => 'Jaket Velour Midnight',
-                'category' => 'Pakaian Luar',
-                'price' => 2850000,
-                'image' => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop',
-                'badge' => 'Baru'
-            ],
-            [
-                'name' => 'Blus Esensi Sutra',
-                'category' => 'Atasan',
-                'price' => 1350000,
-                'image' => 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop',
-            ],
-            [
-                'name' => 'Mantel Parit Minimalis',
-                'category' => 'Pakaian Luar',
-                'price' => 3675000,
-                'image' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop',
-            ],
-            [
-                'name' => 'Rok Motif Abstrak',
-                'category' => 'Bawahan',
-                'price' => 1650000,
-                'image' => 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=1935&auto=format&fit=crop',
-                'badge' => 'Diskon'
-            ]
-        ];
-    @endphp
+
+
 
     <section id="collection" class="py-24 bg-white relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

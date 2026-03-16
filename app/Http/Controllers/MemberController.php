@@ -83,4 +83,13 @@ class MemberController extends Controller
 
         return back()->with('success', 'Foto profil berhasil diperbarui.');
     }
+
+    public function printInvoice(Order $order)
+    {
+        if ($order->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
+            abort(403);
+        }
+        $order->load(['items.product', 'user']);
+        return view('member.invoice', compact('order'));
+    }
 }

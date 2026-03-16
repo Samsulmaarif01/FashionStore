@@ -99,6 +99,7 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::patch('/profile/password', [MemberController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/photo',     [MemberController::class, 'updatePhoto'])->name('profile.photo');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+    Route::get('/orders/{order}/invoice', [MemberController::class, 'printInvoice'])->name('orders.invoice');
 });
 
 Route::middleware(['auth'])->group(function () {

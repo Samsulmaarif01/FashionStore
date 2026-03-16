@@ -72,6 +72,9 @@
 
                         <!-- Action Buttons -->
                         <div class="pt-8 flex flex-col sm:flex-row gap-4">
+                            <a href="{{ route('member.orders.invoice', $order) }}" target="_blank" class="flex-1 bg-indigo-600 text-white py-6 px-10 text-[11px] font-black text-center uppercase tracking-[0.4em] hover:bg-indigo-700 transition-all shadow-2xl rounded-xl">
+                                PRINT INVOICE
+                            </a>
                             <a href="{{ route('member.orders') }}" class="flex-1 bg-black text-white py-6 px-10 text-[11px] font-black text-center uppercase tracking-[0.4em] hover:bg-indigo-600 transition-all shadow-2xl rounded-xl">
                                 MY ORDERS
                             </a>

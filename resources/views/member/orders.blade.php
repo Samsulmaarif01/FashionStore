@@ -36,6 +36,7 @@
                             <th class="text-left px-6 py-4 text-xs font-black uppercase tracking-wider text-gray-500">Total</th>
                             <th class="text-left px-6 py-4 text-xs font-black uppercase tracking-wider text-gray-500">Status</th>
                             <th class="text-left px-6 py-4 text-xs font-black uppercase tracking-wider text-gray-500 hidden lg:table-cell">Alamat Pengiriman</th>
+                            <th class="text-right px-6 py-4 text-xs font-black uppercase tracking-wider text-gray-500">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -72,6 +73,11 @@
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 text-xs hidden lg:table-cell max-w-[200px]">
                                     {{ $order->shipping_address ?? '—' }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="{{ route('member.orders.invoice', $order) }}" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-bold text-xs uppercase tracking-widest whitespace-nowrap">
+                                        Cetak Invoice
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

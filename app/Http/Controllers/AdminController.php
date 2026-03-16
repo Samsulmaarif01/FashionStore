@@ -19,9 +19,11 @@ class AdminController extends Controller
         $totalProducts = Product::count();
         $totalOrders   = Order::count();
         $totalMembers  = User::where('role', 'member')->count();
+        $totalMessages = \App\Models\Message::count();
         $recentOrders  = Order::with('user')->latest()->take(5)->get();
+        $recentMessages = \App\Models\Message::latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('totalProducts', 'totalOrders', 'totalMembers', 'recentOrders'));
+        return view('admin.dashboard', compact('totalProducts', 'totalOrders', 'totalMembers', 'totalMessages', 'recentOrders', 'recentMessages'));
     }
 
     // ── Products CRUD ─────────────────────────────────────────────────────────

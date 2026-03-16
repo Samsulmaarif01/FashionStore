@@ -6,7 +6,7 @@
         <p class="text-sm text-gray-500 mt-1">{{ $members->total() }} member terdaftar</p>
     </div>
 
-    <div class="bg-white border border-gray-100 shadow-sm overflow-hidden">
+    <div class="bg-white border border-gray-100 shadow-sm overflow-hidden rounded-2xl">
         @if ($members->isEmpty())
             <div class="py-16 text-center">
                 <p class="text-gray-400 text-sm">Belum ada member.</p>

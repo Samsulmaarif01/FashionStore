@@ -28,7 +28,7 @@
         <div class="px-6 py-5 border-b border-white/10">
             <a href="/" class="text-xl font-black tracking-tighter text-white">V E L O U R</a>
             <div class="mt-1">
-                <span class="px-2 py-0.5 bg-indigo-600 text-white text-[9px] font-bold uppercase tracking-widest">Admin Panel</span>
+                <span class="px-2 py-0.5 bg-indigo-600 text-white text-[9px] font-bold uppercase tracking-widest rounded-md">Admin Panel</span>
             </div>
         </div>
 
@@ -53,13 +53,14 @@
                     ['label' => 'Produk', 'route' => 'admin.products', 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
                     ['label' => 'Pesanan', 'route' => 'admin.orders', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
                     ['label' => 'Member', 'route' => 'admin.members', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'],
+                    ['label' => 'Pesan Masuk', 'route' => 'admin.messages', 'icon' => 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'],
                 ];
             @endphp
 
             @foreach ($navItems as $item)
                 @php $isActive = request()->routeIs($item['route']) || request()->routeIs($item['route'] . '.*'); @endphp
                 <a href="{{ route($item['route']) }}"
-                    class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200 group rounded-sm
+                    class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200 group rounded-xl
                         {{ $isActive ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:bg-white/5 hover:text-white' }}"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 flex-shrink-0 {{ $isActive ? 'text-indigo-200' : 'text-gray-500 group-hover:text-gray-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">

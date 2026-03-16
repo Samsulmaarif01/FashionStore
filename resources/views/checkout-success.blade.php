@@ -1,7 +1,7 @@
 <x-layout>
     <div class="bg-[#fafafa] min-h-screen py-12 md:py-24 flex items-center">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="bg-white shadow-[0_40px_100px_rgba(0,0,0,0.06)] overflow-hidden border border-gray-100 gsap-fade-up">
+            <div class="bg-white shadow-[0_40px_100px_rgba(0,0,0,0.06)] overflow-hidden border border-gray-100 gsap-fade-up rounded-2xl">
                 
                 <!-- Success Header -->
                 <div class="bg-black py-16 md:py-24 text-center px-6 relative overflow-hidden">
@@ -42,7 +42,7 @@
                             </h3>
                             
                             @if($order->payment_method == 'bank_transfer')
-                                <div class="bg-gray-50 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8 border border-gray-100">
+                                <div class="bg-gray-50 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8 border border-gray-100 rounded-2xl">
                                     <div class="text-center md:text-left">
                                         <div class="flex items-center gap-3 justify-center md:justify-start mb-4">
                                             <div class="w-10 h-6 bg-indigo-900 rounded-sm flex items-center justify-center text-[10px] font-bold text-white uppercase">BCA</div>
@@ -51,19 +51,19 @@
                                         <p class="text-3xl font-black text-black tracking-widest">883 0921 112</p>
                                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2 px-3 py-1 bg-white border border-gray-200 inline-block">A.N. VELOUR GLOBAL RETAIL</p>
                                     </div>
-                                    <button class="w-full md:w-auto px-10 py-5 bg-black text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-indigo-600 transition-all shadow-xl">
-                                        Salin Rekening
-                                    </button>
+                                    <button class="w-full md:w-auto px-10 py-5 bg-black text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-indigo-600 transition-all shadow-xl rounded-xl">
+                            Salin Rekening
+                        </button>
                                 </div>
                             @elseif($order->payment_method == 'qris')
                                 <div class="bg-white border-2 border-dashed border-gray-200 p-10 text-center">
-                                    <div class="w-48 h-48 md:w-56 md:h-56 bg-white mx-auto mb-6 border border-gray-100 p-4 shadow-xl">
+                                    <div class="w-48 h-48 md:w-56 md:h-56 bg-white mx-auto mb-6 border border-gray-100 p-4 shadow-xl rounded-2xl">
                                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VelourStore-{{ $order->order_number }}" alt="QRIS" class="w-full h-full">
                                     </div>
                                     <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 max-w-xs mx-auto leading-loose">Pindai kode QR di atas menggunakan aplikasi mobile banking atau e-wallet Anda.</p>
                                 </div>
                             @else
-                                <div class="bg-indigo-50/50 p-8 border-l-4 border-indigo-600">
+                                <div class="bg-indigo-50/50 p-8 border-l-4 border-indigo-600 rounded-r-xl">
                                     <p class="text-[10px] font-black uppercase tracking-widest text-indigo-700 mb-2">Cash On Delivery (COD)</p>
                                     <p class="text-sm font-medium text-indigo-950 leading-relaxed uppercase tracking-wider">Silakan siapkan dana tunai sebesar Rp {{ number_format($order->total_amount, 0, ',', '.') }} untuk diserahkan kepada kurir saat pesanan sampai.</p>
                                 </div>
@@ -72,10 +72,10 @@
 
                         <!-- Action Buttons -->
                         <div class="pt-8 flex flex-col sm:flex-row gap-4">
-                            <a href="{{ route('member.orders') }}" class="flex-1 bg-black text-white py-6 px-10 text-[11px] font-black text-center uppercase tracking-[0.4em] hover:bg-indigo-600 transition-all shadow-2xl">
+                            <a href="{{ route('member.orders') }}" class="flex-1 bg-black text-white py-6 px-10 text-[11px] font-black text-center uppercase tracking-[0.4em] hover:bg-indigo-600 transition-all shadow-2xl rounded-xl">
                                 MY ORDERS
                             </a>
-                            <a href="/" class="flex-1 bg-white border border-gray-100 text-black py-6 px-10 text-[11px] font-black text-center uppercase tracking-[0.4em] hover:bg-gray-50 transition-all">
+                            <a href="/" class="flex-1 bg-white border border-gray-100 text-black py-6 px-10 text-[11px] font-black text-center uppercase tracking-[0.4em] hover:bg-gray-50 transition-all rounded-xl">
                                 BACK TO HUB
                             </a>
                         </div>

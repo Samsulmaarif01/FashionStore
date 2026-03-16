@@ -24,6 +24,7 @@
             padding: 0.75rem 1rem;
             border: 1.5px solid #e5e7eb;
             background: #fafafa;
+            border-radius: 0.75rem;
             font-size: 0.875rem;
             font-family: 'Plus Jakarta Sans', sans-serif;
             transition: border-color 0.3s, background 0.3s;
@@ -38,6 +39,7 @@
             padding: 0.85rem 1rem;
             background: #000;
             color: #fff;
+            border-radius: 0.75rem;
             font-weight: 700;
             font-size: 0.78rem;
             text-transform: uppercase;

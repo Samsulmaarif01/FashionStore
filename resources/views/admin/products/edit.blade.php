@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="bg-white border border-gray-100 shadow-sm p-6 md:p-8 max-w-3xl">
+    <div class="bg-white border border-gray-100 shadow-sm p-6 md:p-8 max-w-3xl rounded-2xl">
         <form method="POST" action="{{ route('admin.products.update', $product) }}" class="space-y-6">
             @csrf
             @method('PATCH')
@@ -124,12 +124,12 @@
                     <div class="md:col-span-2" id="image-preview-container">
                         <p class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5">Preview Gambar</p>
                         <img id="image-preview" src="{{ old('image', $product->image) }}" alt="Preview"
-                            class="w-32 h-32 object-cover border border-gray-200 bg-gray-50">
+                            class="w-32 h-32 object-cover border border-gray-200 bg-gray-50 rounded-xl">
                     </div>
                 @else
                     <div class="md:col-span-2" id="image-preview-container" style="display:none">
                         <p class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5">Preview Gambar</p>
-                        <img id="image-preview" src="" alt="Preview" class="w-32 h-32 object-cover border border-gray-200 bg-gray-50">
+                        <img id="image-preview" src="" alt="Preview" class="w-32 h-32 object-cover border border-gray-200 bg-gray-50 rounded-xl">
                     </div>
                 @endif
 
@@ -158,10 +158,10 @@
             </div>
 
             <div class="flex items-center gap-4 pt-4 border-t border-gray-100">
-                <button type="submit" class="px-8 py-3 bg-black text-white text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors">
+                <button type="submit" class="px-8 py-3 bg-black text-white text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">
                     Perbarui Produk
                 </button>
-                <a href="{{ route('admin.products') }}" class="px-6 py-3 border border-gray-200 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-black hover:text-black transition-colors">
+                <a href="{{ route('admin.products') }}" class="px-6 py-3 border border-gray-200 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-black hover:text-black transition-colors rounded-xl">
                     Batal
                 </a>
             </div>
@@ -173,7 +173,7 @@
                 onsubmit="return confirm('Yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.')">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="px-6 py-3 border border-red-200 text-[10px] font-bold uppercase tracking-widest text-red-600 hover:bg-red-50 hover:border-red-400 transition-colors">
+                <button type="submit" class="px-6 py-3 border border-red-200 text-[10px] font-bold uppercase tracking-widest text-red-600 hover:bg-red-50 hover:border-red-400 transition-colors rounded-xl">
                     Hapus Produk Secara Permanen
                 </button>
             </form>

@@ -20,7 +20,7 @@
                     <div class="w-full lg:flex-1 space-y-8 md:space-y-12 gsap-fade-up">
                         
                         <!-- Shipping Information Card -->
-                        <div class="bg-white p-6 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100 relative overflow-hidden">
+                        <div class="bg-white p-6 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100 relative overflow-hidden rounded-2xl">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-600"></div>
                             
                             <h3 class="text-xl font-black uppercase tracking-widest mb-10">Informasi Pengiriman</h3>
@@ -29,21 +29,21 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Nama Penerima Lengkap</label>
                                     <input type="text" name="name" value="{{ auth()->user()->name }}" 
-                                        class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight" 
+                                        class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight rounded-xl" 
                                         placeholder="CONTOH: BUDI SANTOSO" required>
                                 </div>
                                 
                                 <div>
                                     <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Nomor WhatsApp</label>
                                     <input type="text" name="phone" value="{{ auth()->user()->phone ?? '' }}" 
-                                        class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight" 
+                                        class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight rounded-xl" 
                                         placeholder="0812XXXXXXXX" required>
                                 </div>
                                 
                                 <div>
                                     <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Metode Pembayaran</label>
                                     <div class="relative">
-                                        <select name="payment_method" class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight appearance-none cursor-pointer" required>
+                                        <select name="payment_method" class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight appearance-none cursor-pointer rounded-xl" required>
                                             <option value="bank_transfer">Transfer Bank (BCA/Mandiri)</option>
                                             <option value="qris">QRIS / E-Wallet</option>
                                             <option value="cod">Bayar di Tempat (COD)</option>
@@ -57,14 +57,14 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Alamat Lengkap</label>
                                     <textarea name="address" rows="4" 
-                                        class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight resize-none" 
+                                        class="w-full bg-gray-50 border-2 border-transparent px-6 py-4 text-sm font-bold focus:bg-white focus:border-indigo-600 focus:ring-0 transition-all uppercase tracking-tight resize-none rounded-xl" 
                                         placeholder="STREET NAME, CITY, PROVINCE, POSTAL CODE" required>{{ auth()->user()->address ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Protection Info -->
-                        <div class="flex items-start gap-6 bg-white p-8 border border-gray-100 shadow-sm">
+                        <div class="flex items-start gap-6 bg-white p-8 border border-gray-100 shadow-sm rounded-2xl">
                             <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -79,13 +79,13 @@
 
                     <!-- Summary Sidebar (Right) -->
                     <div class="w-full lg:w-[450px] space-y-6 gsap-fade-up sticky top-24" style="animation-delay: 200ms;">
-                        <div class="bg-black text-white p-8 md:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.15)] relative">
+                        <div class="bg-black text-white p-8 md:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.15)] relative rounded-3xl overflow-hidden">
                             <h3 class="text-xl font-black uppercase tracking-[0.2em] mb-10">Ringkasan</h3>
                             
                             <div class="space-y-6 mb-10 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                                 @foreach($cart as $id => $details)
                                     <div class="flex items-center gap-5 group">
-                                        <div class="w-16 h-20 bg-gray-900 overflow-hidden flex-shrink-0">
+                                        <div class="w-16 h-20 bg-gray-900 overflow-hidden flex-shrink-0 rounded-lg">
                                             <img src="{{ $details['image'] }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
                                         </div>
                                         <div class="flex-1 min-w-0">
@@ -100,24 +100,43 @@
                             </div>
 
                             <div class="space-y-4 pt-8 border-t border-white/5">
+                                @php
+                                    $originalSubtotal = 0;
+                                    foreach($cart as $item) {
+                                        $originalSubtotal += ($item['original_price'] ?? $item['price']) * $item['quantity'];
+                                    }
+                                    $totalSavings = $originalSubtotal - $total;
+                                @endphp
                                 <div class="flex justify-between items-center">
                                     <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Subtotal</span>
-                                    <span class="text-sm font-bold">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                                    <div class="text-right">
+                                        @if($totalSavings > 0)
+                                            <span class="block text-[9px] text-gray-500 line-through">Rp {{ number_format($originalSubtotal, 0, ',', '.') }}</span>
+                                        @endif
+                                        <span class="text-sm font-bold text-white">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                                    </div>
                                 </div>
+                                @if($totalSavings > 0)
+                                    <div class="flex justify-between items-center text-blue-400">
+                                        <span class="text-[10px] font-black uppercase tracking-widest">Hemat Koleksi</span>
+                                        <span class="text-sm font-bold">-Rp {{ number_format($totalSavings, 0, ',', '.') }}</span>
+                                    </div>
+                                @endif
                                 <div class="flex justify-between items-center text-gray-500">
                                     <span class="text-[10px] font-black uppercase tracking-widest">Pengiriman</span>
                                     <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Gratis</span>
                                 </div>
                                 <div class="pt-8 mt-4 border-t border-white/10">
-                                    <div class="flex justify-between items-end">
-                                        <span class="text-xs font-black uppercase tracking-[0.3em] text-gray-400">Total</span>
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mt-2">Total Harga</span>
                                         <div class="text-right">
-                                            <span class="block text-3xl font-black text-white leading-none tracking-tighter">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                                            <span class="block text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-1 leading-none">Rp</span>
+                                            <span class="text-4xl font-black text-white tracking-tighter leading-none">{{ number_format($total, 0, ',', '.') }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <button type="submit" class="w-full bg-indigo-600 text-white py-6 mt-10 font-black uppercase tracking-[0.4em] text-[11px] hover:bg-white hover:text-black transition-all duration-500 group flex items-center justify-center gap-4">
+                                <button type="submit" class="w-full bg-indigo-600 text-white py-6 mt-10 font-black uppercase tracking-[0.4em] text-[11px] hover:bg-white hover:text-black transition-all duration-500 group flex items-center justify-center gap-4 rounded-xl">
                                     Buat Pesanan
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                                 </button>

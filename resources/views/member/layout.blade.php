@@ -70,7 +70,7 @@
                 @endif
                 <p class="text-sm font-bold text-gray-900 truncate">{{ auth()->user()->name }}</p>
                 <p class="text-xs text-gray-500 mt-0.5 truncate">{{ auth()->user()->email }}</p>
-                <span class="inline-block mt-2 px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider rounded-sm">Member</span>
+                <span class="inline-block mt-2 px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider rounded-md">Member</span>
             </div>
 
             <nav class="flex-1 p-4 space-y-1">
@@ -86,8 +86,8 @@
                 @foreach ($navItems as $item)
                     @php $isActive = request()->routeIs($item['route']); @endphp
                     <a href="{{ route($item['route']) }}"
-                        class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-none transition-all duration-200 group
-                            {{ $isActive ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-50 hover:text-black' }}"
+                        class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group
+                            {{ $isActive ? 'bg-black text-white shadow-lg shadow-black/10' : 'text-gray-700 hover:bg-gray-50 hover:text-black' }}"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isActive ? 'text-indigo-300' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             {!! $item['icon'] !!}
@@ -112,19 +112,19 @@
             <!-- Mobile nav -->
             <div class="md:hidden flex gap-2 mb-6 overflow-x-auto pb-2">
                 <a href="{{ route('member.dashboard') }}"
-                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.dashboard') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
+                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border rounded-xl {{ request()->routeIs('member.dashboard') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
                     Dashboard
                 </a>
                 <a href="{{ route('member.wishlist') }}"
-                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.wishlist') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
+                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border rounded-xl {{ request()->routeIs('member.wishlist') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
                     Wishlist
                 </a>
                 <a href="{{ route('member.orders') }}"
-                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.orders') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
+                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border rounded-xl {{ request()->routeIs('member.orders') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
                     Pesanan
                 </a>
                 <a href="{{ route('member.settings') }}"
-                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border {{ request()->routeIs('member.settings') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
+                    class="flex-shrink-0 px-4 py-2 text-xs font-bold uppercase tracking-wider border rounded-xl {{ request()->routeIs('member.settings') ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-black' }} transition-colors">
                     Pengaturan
                 </a>
             </div>

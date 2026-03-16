@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="bg-white border border-gray-100 shadow-sm p-6 md:p-8 max-w-3xl">
+    <div class="bg-white border border-gray-100 shadow-sm p-6 md:p-8 max-w-3xl rounded-2xl">
         <form method="POST" action="{{ route('admin.products.store') }}" class="space-y-6">
             @csrf
 
@@ -128,7 +128,7 @@
                 <!-- Image Preview -->
                 <div class="md:col-span-2" id="image-preview-container" style="{{ old('image') ? '' : 'display:none' }}">
                     <p class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5">Preview</p>
-                    <img id="image-preview" src="{{ old('image') }}" alt="Preview" class="w-32 h-32 object-cover border border-gray-200 bg-gray-50">
+                    <img id="image-preview" src="{{ old('image') }}" alt="Preview" class="w-32 h-32 object-cover border border-gray-200 bg-gray-50 rounded-xl">
                 </div>
 
                 <!-- Description -->
@@ -157,10 +157,10 @@
             </div>
 
             <div class="flex items-center gap-4 pt-4 border-t border-gray-100">
-                <button type="submit" class="px-8 py-3 bg-black text-white text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors">
+                <button type="submit" class="px-8 py-3 bg-black text-white text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">
                     Simpan Produk
                 </button>
-                <a href="{{ route('admin.products') }}" class="px-6 py-3 border border-gray-200 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-black hover:text-black transition-colors">
+                <a href="{{ route('admin.products') }}" class="px-6 py-3 border border-gray-200 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-black hover:text-black transition-colors rounded-xl">
                     Batal
                 </a>
             </div>

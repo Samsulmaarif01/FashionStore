@@ -11,8 +11,23 @@ class CartController extends Controller
     {
         $cart = session()->get('cart', []);
         $total = 0;
-        foreach($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
+        
+        $updatedCart = false;
+        foreach($cart as $id => $item) {
+            // Extra check: if original_price is missing, fetch it
+            if (!isset($item['original_price']) || !isset($item['discount_percent'])) {
+                $product = Product::find($id);
+                if ($product) {
+                    $cart[$id]['original_price'] = $product->price;
+                    $cart[$id]['discount_percent'] = $product->discount_percent;
+                    $updatedCart = true;
+                }
+            }
+            $total += $cart[$id]['price'] * $cart[$id]['quantity'];
+        }
+
+        if ($updatedCart) {
+            session()->put('cart', $cart);
         }
         
         return view('cart', compact('cart', 'total'));
@@ -33,6 +48,8 @@ class CartController extends Controller
                         "name" => $product->name,
                         "quantity" => 1,
                         "price" => $product->discounted_price,
+                        "original_price" => $product->price,
+                        "discount_percent" => $product->discount_percent,
                         "image" => $product->image,
                         "slug" => $product->slug
                     ]
@@ -56,6 +73,8 @@ class CartController extends Controller
             "name" => $product->name,
             "quantity" => 1,
             "price" => $product->discounted_price,
+            "original_price" => $product->price,
+            "discount_percent" => $product->discount_percent,
             "image" => $product->image,
             "slug" => $product->slug
         ];

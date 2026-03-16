@@ -8,13 +8,13 @@
 
     <!-- Flash Success -->
     @if (session('success'))
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center gap-2">
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center gap-2 rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="bg-white border border-gray-100 shadow-sm">
+    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden">
         @if ($orders->isEmpty())
             <div class="py-20 text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
@@ -22,7 +22,7 @@
                 </svg>
                 <p class="text-gray-400 font-medium text-sm">Belum ada pesanan</p>
                 <p class="text-gray-400 text-xs mt-1">Mulai belanja dan pesanan Anda akan muncul di sini.</p>
-                <a href="/" class="inline-block mt-6 px-8 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors">
+                <a href="/" class="inline-block mt-6 px-8 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">
                     Mulai Belanja
                 </a>
             </div>
@@ -66,7 +66,7 @@
                                         $colorClass = $colors[$order->status] ?? 'bg-gray-50 text-gray-700 border-gray-200';
                                         $label = $labels[$order->status] ?? ucfirst($order->status);
                                     @endphp
-                                    <span class="inline-block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border {{ $colorClass }}">
+                                    <span class="inline-block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-md {{ $colorClass }}">
                                         {{ $label }}
                                     </span>
                                 </td>

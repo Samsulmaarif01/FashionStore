@@ -47,7 +47,7 @@
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-y-2"
                         x-transition:enter-end="opacity-100 translate-y-0"
-                        class="absolute right-0 mt-4 w-72 md:w-96 bg-white p-4 shadow-2xl border border-gray-100 z-50"
+                        class="absolute right-0 mt-4 w-72 md:w-96 bg-white p-4 shadow-2xl border border-gray-100 z-50 rounded-2xl"
                         style="display: none;"
                     >
                         <form action="{{ route('collection') }}" method="GET" class="relative">
@@ -55,7 +55,7 @@
                                 type="text" 
                                 name="q" 
                                 placeholder="Cari produk..." 
-                                class="w-full px-4 py-3 bg-gray-50 border-none focus:ring-2 focus:ring-black text-sm"
+                                class="w-full px-4 py-3 bg-gray-50 border-none focus:ring-2 focus:ring-black text-sm rounded-xl"
                                 autofocus
                             >
                             <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black">
@@ -126,7 +126,7 @@
                             x-transition:leave="transition ease-in duration-150"
                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                             x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
-                            class="absolute right-0 mt-3 w-56 bg-white rounded-none shadow-2xl border border-gray-100 z-50 overflow-hidden"
+                            class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden"
                             style="display: none;"
                         >
                             <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">

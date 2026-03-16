@@ -15,7 +15,7 @@
             $completedOrders = auth()->user()->orders()->where('status', 'delivered')->count();
         @endphp
 
-        <div class="bg-white border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow rounded-2xl">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Total Pesanan</p>
                 <div class="w-10 h-10 bg-indigo-50 flex items-center justify-center">
@@ -27,7 +27,7 @@
             <p class="text-4xl font-black text-black">{{ $totalOrders }}</p>
         </div>
 
-        <div class="bg-white border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow rounded-2xl">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Sedang Diproses</p>
                 <div class="w-10 h-10 bg-amber-50 flex items-center justify-center">
@@ -39,7 +39,7 @@
             <p class="text-4xl font-black text-black">{{ $activeOrders }}</p>
         </div>
 
-        <div class="bg-white border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow rounded-2xl">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Selesai</p>
                 <div class="w-10 h-10 bg-green-50 flex items-center justify-center">
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Recent Orders -->
-    <div class="bg-white border border-gray-100 shadow-sm">
+    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
             <h2 class="text-sm font-black uppercase tracking-wider text-black">Pesanan Terbaru</h2>
             <a href="{{ route('member.orders') }}" class="text-xs font-semibold text-indigo-600 hover:underline uppercase tracking-wider">Lihat Semua</a>
@@ -65,7 +65,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <p class="text-gray-400 text-sm font-medium">Belum ada pesanan</p>
-                <a href="/" class="inline-block mt-4 px-6 py-2 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors">Belanja Sekarang</a>
+                <a href="/" class="inline-block mt-4 px-6 py-2 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">Belanja Sekarang</a>
             </div>
         @else
             <div class="overflow-x-auto">
@@ -109,8 +109,8 @@
 
     <!-- Quick Links -->
     <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <a href="{{ route('member.settings') }}" class="group flex items-center gap-4 bg-white border border-gray-100 p-5 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
-            <div class="w-10 h-10 bg-gray-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
+        <a href="{{ route('member.settings') }}" class="group flex items-center gap-4 bg-white border border-gray-100 p-5 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all rounded-2xl">
+            <div class="w-10 h-10 bg-gray-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors rounded-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 group-hover:text-indigo-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -121,8 +121,8 @@
             </div>
         </a>
 
-        <a href="/" class="group flex items-center gap-4 bg-white border border-gray-100 p-5 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
-            <div class="w-10 h-10 bg-gray-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors">
+        <a href="/" class="group flex items-center gap-4 bg-white border border-gray-100 p-5 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all rounded-2xl">
+            <div class="w-10 h-10 bg-gray-50 group-hover:bg-indigo-50 flex items-center justify-center transition-colors rounded-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 group-hover:text-indigo-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>

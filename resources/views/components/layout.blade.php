@@ -5,6 +5,7 @@
     <!-- Viewport for Mobile First -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Velour | Gerakan Dinamis & Keanggunan Modern</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

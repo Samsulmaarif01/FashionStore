@@ -1,6 +1,6 @@
 @props(['product'])
 
-<div class="product-card group relative bg-white flex flex-col overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+<div class="product-card group relative bg-white flex flex-col overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 rounded-2xl">
     <!-- Stretched Link to Detail Page -->
     <a href="{{ route('product.detail', $product->slug) }}" class="absolute inset-0 z-10 w-full h-full">
         <span class="sr-only">Lihat detail {{ $product->name }}</span>

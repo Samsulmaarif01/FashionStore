@@ -27,7 +27,7 @@
                 Temukan koleksi baru dengan kualitas terbaik dan gaya memukau.
             </p>
             <div class="hero-text opacity-0 translate-y-10">
-                <a href="#collection" class="relative group inline-block overflow-hidden rounded-none px-10 py-4 bg-white text-black font-extrabold uppercase tracking-[0.2em] text-sm transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                <a href="#collection" class="relative group inline-block overflow-hidden rounded-full px-10 py-4 bg-white text-black font-extrabold uppercase tracking-[0.2em] text-sm transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
                     <span class="relative z-10 transition-colors duration-300 group-hover:text-white">Beli Koleksi</span>
                     <!-- Fluid background effect on hover -->
                     <div class="absolute inset-0 bg-indigo-600 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0"></div>
@@ -47,7 +47,7 @@
                     <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-black">Produk Unggulan</h3>
                 </div>
                 <div class="hidden md:block gsap-fade-up">
-                    <a href="#" class="text-sm font-semibold text-black uppercase tracking-widest border-b-2 border-transparent hover:border-black transition-colors duration-300 pb-1">
+                    <a href="{{ route('collection') }}" class="text-sm font-semibold text-black uppercase tracking-widest border-b-2 border-transparent hover:border-black transition-colors duration-300 pb-1">
                         Lihat Semua Produk
                     </a>
                 </div>
@@ -63,7 +63,7 @@
             </div>
             
             <div class="mt-12 text-center md:hidden gsap-fade-up">
-                <a href="#" class="inline-block px-8 py-3 bg-black text-white text-sm font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors duration-300">
+                <a href="{{ route('collection') }}" class="inline-block px-8 py-3 bg-black text-white text-sm font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors duration-300 rounded-xl">
                     Lihat Semua
                 </a>
             </div>
@@ -107,12 +107,16 @@
                 <!-- Pagination & Navigation -->
                 <div class="swiper-pagination !bottom-0"></div>
                 <!-- Custom Navigation buttons hidden on mobile -->
-                <div class="swiper-button-prev !text-black !left-0 !w-12 !h-12 bg-white rounded-full shadow-lg hidden md:flex after:!text-xl"></div>
-                <div class="swiper-button-next !text-black !right-0 !w-12 !h-12 bg-white rounded-full shadow-lg hidden md:flex after:!text-xl"></div>
+                <div class="swiper-button-prev !text-black !left-4 !w-11 !h-11 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hidden md:flex after:hidden hover:bg-black/5 hover:scale-110 transition-all duration-500 group border border-black/5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                </div>
+                <div class="swiper-button-next !text-black !right-4 !w-11 !h-11 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hidden md:flex after:hidden hover:bg-black/5 hover:scale-110 transition-all duration-500 group border border-black/5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                </div>
             </div>
 
             <div class="text-center mt-12 gsap-fade-up">
-                <a href="{{ route('collection') }}" class="inline-block px-10 py-4 bg-black text-white text-xs font-black uppercase tracking-[0.3em] hover:bg-indigo-600 transition-colors duration-300">
+                <a href="{{ route('collection', ['trending' => 1]) }}" class="inline-block px-10 py-4 bg-black text-white text-xs font-black uppercase tracking-[0.3em] hover:bg-indigo-600 transition-colors duration-300 rounded-xl">
                     Lihat Semua Produk
                 </a>
             </div>
@@ -124,60 +128,78 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="gsap-fade-up">
-                    <h2 class="text-xs font-bold tracking-[0.3em] text-indigo-600 uppercase mb-3">Terhubung</h2>
-                    <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-black mb-6">Kontak Kami</h3>
-                    <p class="text-gray-600 mb-8 leading-relaxed max-w-md">
+                    <h2 class="text-xs font-black tracking-[0.3em] text-indigo-600 uppercase mb-4">Terhubung</h2>
+                    <h3 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-black mb-8 leading-none">Kontak Kami</h3>
+                    <p class="text-gray-500 mb-10 leading-relaxed max-w-md font-medium text-sm">
                         Apakah Anda memiliki pertanyaan tentang koleksi kami atau membutuhkan bantuan dengan pesanan? Tim kami siap membantu Anda dengan layanan personal.
                     </p>
                     
                     <div class="space-y-6">
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-none border border-gray-100 text-indigo-600">
+                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-xl border border-gray-100 text-indigo-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-black uppercase tracking-wider text-sm">Butik Utama</h4>
-                                <p class="text-gray-500 text-sm">Jl. Mode No. 123, Jakarta Selatan</p>
+                                <h4 class="font-black text-black uppercase tracking-widest text-xs mb-1">Butik Utama</h4>
+                                <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">Jl. Mode No. 123, Jakarta Selatan</p>
                             </div>
                         </div>
                         
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-none border border-gray-100 text-indigo-600">
+                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-xl border border-gray-100 text-indigo-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-black uppercase tracking-wider text-sm">Email</h4>
-                                <p class="text-gray-500 text-sm">hello@velour.com</p>
+                                <h4 class="font-black text-black uppercase tracking-widest text-xs mb-1">Email</h4>
+                                <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">hello@velour.com</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="gsap-fade-up bg-gray-50 p-8 md:p-12 border border-gray-100 relative overflow-hidden">
+                <div class="gsap-fade-up bg-gray-50 p-8 md:p-14 border border-gray-100 relative overflow-hidden rounded-[2rem] shadow-sm">
                     <!-- Subtle decorative element -->
-                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-50 rounded-full opacity-50"></div>
+                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-50 rounded-full opacity-30"></div>
                     
-                    <form action="#" class="relative z-10 space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @if(session('success'))
+                        <div class="relative z-10 mb-8 p-6 bg-black text-white rounded-2xl flex items-center gap-4 animate-bounce">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span class="text-xs font-black uppercase tracking-widest">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="relative z-10 mb-8 p-6 bg-red-50 text-red-600 rounded-2xl border border-red-100">
+                            <ul class="list-disc list-inside text-[10px] font-black uppercase tracking-widest space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('contact.store') }}" method="POST" class="relative z-10 space-y-8">
+                        {{ csrf_field() }}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Nama</label>
-                                <input type="text" class="w-full bg-white border-b border-gray-200 py-3 px-0 focus:outline-none focus:border-indigo-600 transition-colors text-sm" placeholder="Nama Anda">
+                                <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Nama</label>
+                                <input type="text" name="name" required class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all text-xs font-bold shadow-sm tracking-wider" placeholder="Nama Anda">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Email</label>
-                                <input type="email" class="w-full bg-white border-b border-gray-200 py-3 px-0 focus:outline-none focus:border-indigo-600 transition-colors text-sm" placeholder="email@contoh.com">
+                                <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Email</label>
+                                <input type="email" name="email" required class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all text-xs font-bold shadow-sm tracking-wider" placeholder="email@contoh.com">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Pesan</label>
-                            <textarea rows="4" class="w-full bg-white border-b border-gray-200 py-3 px-0 focus:outline-none focus:border-indigo-600 transition-colors text-sm resize-none" placeholder="Bagaimana kami bisa membantu?"></textarea>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Pesan</label>
+                            <textarea name="message" rows="5" required class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all text-xs font-bold shadow-sm resize-none tracking-wider" placeholder="Bagaimana kami bisa membantu?"></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-black text-white font-bold py-4 uppercase tracking-[0.3em] text-xs hover:bg-indigo-600 transition-colors duration-300">
+                        <button type="submit" class="w-full bg-black text-white font-black py-6 uppercase tracking-[0.4em] text-[10px] hover:bg-indigo-600 transition-all duration-500 rounded-2xl shadow-xl hover:-translate-y-1">
                             Kirim Pesan
                         </button>
                     </form>

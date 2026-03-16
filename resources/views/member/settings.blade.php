@@ -8,7 +8,7 @@
 
     <!-- Flash Messages -->
     @if (session('success'))
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center gap-2">
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center gap-2 rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
@@ -17,7 +17,7 @@
     <div class="space-y-6">
 
         <!-- ── Photo Profile ────────────────────────────────────── -->
-        <div class="bg-white border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-white border border-gray-100 shadow-sm overflow-hidden rounded-2xl">
             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
                 <h2 class="text-xs font-black uppercase tracking-wider text-gray-700">Foto Profil</h2>
             </div>
@@ -39,7 +39,7 @@
 
                         <form method="POST" action="{{ route('member.profile.photo') }}" enctype="multipart/form-data" class="flex items-center gap-3">
                             @csrf
-                            <label for="profile_photo" class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-xs font-bold uppercase tracking-wider text-gray-700 hover:border-indigo-500 hover:text-indigo-600 transition-colors">
+                            <label for="profile_photo" class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-xs font-bold uppercase tracking-wider text-gray-700 hover:border-indigo-500 hover:text-indigo-600 transition-colors rounded-xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 Pilih Foto
                             </label>
@@ -52,7 +52,7 @@
         </div>
 
         <!-- ── Informasi Profil ────────────────────────────────── -->
-        <div class="bg-white border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-white border border-gray-100 shadow-sm overflow-hidden rounded-2xl">
             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
                 <h2 class="text-xs font-black uppercase tracking-wider text-gray-700">Informasi Profil</h2>
             </div>
@@ -98,7 +98,7 @@
                     </div>
 
                     <div class="flex justify-end pt-2">
-                        <button type="submit" class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors">
+                        <button type="submit" class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">
                             Simpan Perubahan
                         </button>
                     </div>
@@ -107,7 +107,7 @@
         </div>
 
         <!-- ── Ubah Password ──────────────────────────────────────── -->
-        <div class="bg-white border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-white border border-gray-100 shadow-sm overflow-hidden rounded-2xl">
             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
                 <h2 class="text-xs font-black uppercase tracking-wider text-gray-700">Keamanan — Ubah Password</h2>
             </div>
@@ -155,7 +155,7 @@
                     </div>
 
                     <div class="flex justify-end pt-2">
-                        <button type="submit" class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors">
+                        <button type="submit" class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">
                             Ubah Password
                         </button>
                     </div>

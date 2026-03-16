@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AdminMessageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -74,6 +76,11 @@ Route::get('/tentang-kami', function () {
     return view('about', compact('about'));
 })->name('about');
 
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/contact', function() {
+    return redirect('/#contact');
+});
+
 // ── Breeze Dashboard redirect ─────────────────────────────────────────────────
 Route::get('/dashboard', function () {
     if (auth()->user()->isAdmin()) {
@@ -130,6 +137,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/categories', [AdminController::class, 'storeCategory'])->name('categories.store');
     Route::patch('/categories/{category}', [AdminController::class, 'updateCategory'])->name('categories.update');
     Route::delete('/categories/{category}', [AdminController::class, 'destroyCategory'])->name('categories.destroy');
+
+    // Messages
+    Route::get('/messages', [AdminMessageController::class, 'index'])->name('messages');
+    Route::delete('/messages/{message}', [AdminMessageController::class, 'destroy'])->name('messages.destroy');
 });
 
 // ── Breeze Profile Routes ─────────────────────────────────────────────────────

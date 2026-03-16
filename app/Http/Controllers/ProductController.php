@@ -22,6 +22,10 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $request->q . '%');
         }
 
+        if ($request->has('trending')) {
+            $query->where('is_trending', true);
+        }
+
         $products = $query->latest()->paginate(12);
         $categories = Category::has('products')->get();
 

@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    button, 
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    input[type="number"], 
+    input[type="tel"], 
+    input[type="url"], 
+    textarea, 
+    select {
+        @apply rounded-xl;
+    }
+}
+
+@layer components {
+    .card, .product-card {
+        @apply rounded-2xl overflow-hidden;
+    }
+    
+    .btn-premium {
+        @apply rounded-xl px-6 py-3 transition-all duration-300;
+    }
+}

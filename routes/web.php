@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 // ── Public Routes ─────────────────────────────────────────────────────────────
-
 Route::get('/', function () {
     $products = \App\Models\Product::where('is_active', true)
         ->where('is_trending', true)

@@ -26,9 +26,7 @@
                                             <a href="{{ route('product.detail', $details['slug']) }}" class="text-[15px] font-bold text-black hover:text-gray-500 transition-colors tracking-tight mb-2">{{ $details['name'] }}</a>
                                             
                                             <div class="space-y-1 mt-1">
-                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Variant: Default</p>
-                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Size: L</p>
-                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Color: Black</p>
+                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Size: {{ $details['size'] ?? 'M' }}</p>
                                             </div>
 
                                             <div class="flex items-center gap-5 mt-auto pt-6 text-gray-400">

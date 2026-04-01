@@ -147,4 +147,54 @@
             </div>
         </div>
     </section>
+
+    <!-- Reviews Section -->
+    <section class="border-t border-gray-100 bg-[#fafafa] py-16 md:py-24">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-12">
+                <h2 class="text-2xl font-black text-black uppercase tracking-tight">Ulasan Pelanggan</h2>
+                @if(isset($productObj->id) && $productObj->reviews->count() > 0)
+                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-gray-100">
+                        <svg class="h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                        <span class="text-xl font-black text-black">{{ number_format($productObj->average_rating, 1) }} <span class="text-gray-400 text-sm font-medium">({{ $productObj->reviews_count }} Ulasan)</span></span>
+                    </div>
+                @endif
+            </div>
+
+            @if(!isset($productObj->id) || $productObj->reviews->isEmpty())
+                <div class="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Belum ada ulasan untuk produk ini.</p>
+                    <p class="text-xs text-gray-400 mt-2">Jadilah yang pertama untuk memberikan pendapat Anda setelah membeli!</p>
+                </div>
+            @else
+                <div class="space-y-6">
+                    @foreach($productObj->reviews as $review)
+                        <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex gap-5">
+                                <div class="w-12 h-12 bg-gray-100 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
+                                    <img src="{{ $review->user->profile_photo ? asset('storage/'.$review->user->profile_photo) : 'https://ui-avatars.com/api/?name='.urlencode($review->user->name).'&background=111&color=fff' }}" alt="{{ $review->user->name }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h4 class="font-bold text-sm text-black">{{ $review->user->name }}</h4>
+                                            <p class="text-[11px] text-gray-400 font-medium tracking-wide uppercase mt-1">Ditinjau pada {{ $review->created_at->format('d M Y') }}</p>
+                                        </div>
+                                        <div class="flex text-amber-400">
+                                            @for($i=1; $i<=5; $i++)
+                                                <svg class="w-4 h-4 {{ $i <= $review->rating ? 'fill-current' : 'text-gray-200' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    @if($review->comment)
+                                        <p class="text-sm text-gray-600 leading-relaxed">{{ $review->comment }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </section>
 </x-layout>

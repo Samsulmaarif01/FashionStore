@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -139,5 +140,35 @@ class MemberController extends Controller
         );
 
         return back()->with('success', 'Ulasan berhasil disimpan. Terima kasih atas tanggapan Anda!');
+    }
+
+    public function reviews()
+    {
+        $reviews = Auth::user()->reviews()->with('product', 'order')->latest()->paginate(10);
+        return view('member.reviews', compact('reviews'));
+    }
+
+    public function updateReview(Request $request, Review $review)
+    {
+        if ($review->user_id !== Auth::id()) abort(403);
+
+        $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        $review->update([
+            'rating'  => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return back()->with('success', 'Ulasan Anda berhasil diperbarui.');
+    }
+
+    public function destroyReview(Review $review)
+    {
+        if ($review->user_id !== Auth::id()) abort(403);
+        $review->delete();
+        return back()->with('success', 'Ulasan berhasil dihapus.');
     }
 }

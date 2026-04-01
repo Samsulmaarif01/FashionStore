@@ -39,47 +39,30 @@ class CartController extends Controller
             return back()->with('error', 'Produk ini sedang habis.');
         }
 
+        $size = $request->input('size', 'M'); // Default to M if not provided
         $cart = session()->get('cart', []);
+        $cartKey = $product->id . '-' . $size;
 
-        // If cart is empty, add first product
-        if(!$cart) {
-            $cart = [
-                    $product->id => [
-                        "name" => $product->name,
-                        "quantity" => 1,
-                        "price" => $product->discounted_price,
-                        "original_price" => $product->price,
-                        "discount_percent" => $product->discount_percent,
-                        "image" => $product->image,
-                        "slug" => $product->slug
-                    ]
-            ];
-            session()->put('cart', $cart);
-            return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
-        }
-
-        // If cart not empty then check if this product exist then increment quantity
-        if(isset($cart[$product->id])) {
-            if ($cart[$product->id]['quantity'] >= $product->stock) {
+        if(isset($cart[$cartKey])) {
+            if ($cart[$cartKey]['quantity'] >= $product->stock) {
                  return back()->with('error', 'Stok produk tidak mencukupi.');
             }
-            $cart[$product->id]['quantity']++;
-            session()->put('cart', $cart);
-            return back()->with('success', 'Jumlah produk di keranjang bertambah!');
+            $cart[$cartKey]['quantity']++;
+        } else {
+            $cart[$cartKey] = [
+                "product_id" => $product->id,
+                "name" => $product->name,
+                "quantity" => 1,
+                "price" => $product->discounted_price,
+                "original_price" => $product->price,
+                "discount_percent" => $product->discount_percent,
+                "image" => $product->image,
+                "slug" => $product->slug,
+                "size" => $size
+            ];
         }
 
-        // If item not exist in cart then add to cart with quantity = 1
-        $cart[$product->id] = [
-            "name" => $product->name,
-            "quantity" => 1,
-            "price" => $product->discounted_price,
-            "original_price" => $product->price,
-            "discount_percent" => $product->discount_percent,
-            "image" => $product->image,
-            "slug" => $product->slug
-        ];
         session()->put('cart', $cart);
-        
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
@@ -87,7 +70,10 @@ class CartController extends Controller
     {
         if($request->id && $request->quantity){
             $cart = session()->get('cart');
-            $product = Product::find($request->id);
+            $item = $cart[$request->id] ?? null;
+            if (!$item) return response()->json(['error' => 'Item tidak ditemukan.'], 404);
+
+            $product = Product::find($item['product_id']);
             
             if ($request->quantity > $product->stock) {
                 return response()->json(['error' => 'Stok tidak mencukupi.'], 400);

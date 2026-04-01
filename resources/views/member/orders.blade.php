@@ -149,13 +149,16 @@
                                                                 <input type="hidden" name="product_id" value="{{ $item->product->id }}">
                                                                 <div class="mb-3">
                                                                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Rating</label>
-                                                                    <select name="rating" required class="w-full text-sm border-gray-200 rounded-lg focus:ring-black focus:border-black">
-                                                                        <option value="5">5 Bintang - Sangat Baik</option>
-                                                                        <option value="4">4 Bintang - Baik</option>
-                                                                        <option value="3">3 Bintang - Cukup</option>
-                                                                        <option value="2">2 Bintang - Kurang</option>
-                                                                        <option value="1">1 Bintang - Sangat Kurang</option>
-                                                                    </select>
+                                                                    <div class="flex items-center gap-1 star-container">
+                                                                        @for($i=1; $i<=5; $i++)
+                                                                            <label class="cursor-pointer">
+                                                                                <input type="radio" name="rating" value="{{ $i }}" {{ $i == 5 ? 'checked' : '' }} class="sr-only star-input">
+                                                                                <svg data-value="{{ $i }}" class="w-8 h-8 star-icon {{ $i <= 5 ? 'fill-amber-400 text-amber-400' : 'text-gray-300' }} hover:fill-amber-400 transition-colors" viewBox="0 0 20 20">
+                                                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                                                </svg>
+                                                                            </label>
+                                                                        @endfor
+                                                                    </div>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Komentar</label>
@@ -194,5 +197,45 @@
             document.getElementById('review-modal-' + id).classList.add('hidden');
             document.getElementById('review-modal-' + id).classList.remove('flex');
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.star-container').forEach(container => {
+                const starIcons = container.querySelectorAll('.star-icon');
+                
+                function highlight(value, isHover) {
+                    starIcons.forEach(icon => {
+                        const iconValue = parseInt(icon.getAttribute('data-value'));
+                        if (iconValue <= value) {
+                            icon.classList.add('fill-amber-400', 'text-amber-400');
+                            icon.classList.remove('text-gray-300');
+                        } else {
+                            icon.classList.remove('fill-amber-400', 'text-amber-400');
+                            if (!isHover || iconValue > value) {
+                                icon.classList.add('text-gray-300');
+                            }
+                        }
+                    });
+                }
+
+                container.addEventListener('mouseover', function(e) {
+                    const star = e.target.closest('svg');
+                    if (star) highlight(parseInt(star.getAttribute('data-value')), true);
+                });
+
+                container.addEventListener('mouseout', function(e) {
+                    const checkedInput = container.querySelector('.star-input:checked');
+                    highlight(checkedInput ? parseInt(checkedInput.value) : 0, false);
+                });
+
+                container.addEventListener('click', function(e) {
+                    const star = e.target.closest('svg');
+                    if (star) {
+                        const value = parseInt(star.getAttribute('data-value'));
+                        container.querySelector(`.star-input[value="${value}"]`).checked = true;
+                        highlight(value, false);
+                    }
+                });
+            });
+        });
     </script>
 </x-member-layout>

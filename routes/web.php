@@ -102,6 +102,11 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::patch('/orders/{order}/cancel', [MemberController::class, 'cancelOrder'])->name('orders.cancel');
     Route::patch('/orders/{order}/complete', [MemberController::class, 'completeOrder'])->name('orders.complete');
     Route::post('/orders/{order}/review', [MemberController::class, 'storeReview'])->name('orders.review');
+    
+    // Reviews
+    Route::get('/reviews', [MemberController::class, 'reviews'])->name('reviews');
+    Route::patch('/reviews/{review}', [MemberController::class, 'updateReview'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [MemberController::class, 'destroyReview'])->name('reviews.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {

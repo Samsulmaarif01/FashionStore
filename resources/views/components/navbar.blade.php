@@ -47,7 +47,7 @@
 
             <!-- Right: Icons -->
             <div class="flex-1 flex justify-end items-center">
-                <div class="flex items-center space-x-3 md:space-x-5">
+                <div class="flex items-center space-x-5 md:space-x-8">
                     <!-- Search Icon & Popup -->
                     <div class="relative" x-data="{ searchOpen: false }">
                         <button @click="searchOpen = !searchOpen" class="text-gray-900 hover:text-indigo-600 transition-colors flex items-center">

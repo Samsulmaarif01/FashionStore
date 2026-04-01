@@ -100,6 +100,9 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::post('/profile/photo',     [MemberController::class, 'updatePhoto'])->name('profile.photo');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
     Route::get('/orders/{order}/invoice', [MemberController::class, 'printInvoice'])->name('orders.invoice');
+    Route::patch('/orders/{order}/cancel', [MemberController::class, 'cancelOrder'])->name('orders.cancel');
+    Route::patch('/orders/{order}/complete', [MemberController::class, 'completeOrder'])->name('orders.complete');
+    Route::post('/orders/{order}/review', [MemberController::class, 'storeReview'])->name('orders.review');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -125,6 +128,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Orders
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
     Route::patch('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.status');
+    Route::delete('/orders/{order}', [AdminController::class, 'destroyOrder'])->name('orders.destroy');
 
     // Members
     Route::get('/members', [AdminController::class, 'members'])->name('members');

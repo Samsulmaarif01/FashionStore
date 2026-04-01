@@ -12,10 +12,13 @@ class Order extends Model
     protected $fillable = [
         'user_id', 'order_number', 'status',
         'total_amount', 'shipping_address', 'payment_method', 'notes', 'paid_at',
+        'cancel_reason', 'shipped_at', 'completed_at',
     ];
 
     protected $casts = [
         'paid_at'      => 'datetime',
+        'shipped_at'   => 'datetime',
+        'completed_at' => 'datetime',
         'total_amount' => 'integer',
     ];
 
@@ -32,10 +35,10 @@ class Order extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'pending'    => 'Menunggu Pembayaran',
+            'pending'    => 'Menunggu Konfirmasi',
             'processing' => 'Diproses',
-            'shipped'    => 'Dalam Pengiriman',
-            'delivered'  => 'Terkirim',
+            'shipped'    => 'Dikirim',
+            'completed'  => 'Selesai',
             'cancelled'  => 'Dibatalkan',
             default      => ucfirst($this->status),
         };
@@ -47,7 +50,7 @@ class Order extends Model
             'pending'    => 'amber',
             'processing' => 'blue',
             'shipped'    => 'indigo',
-            'delivered'  => 'green',
+            'completed'  => 'green',
             'cancelled'  => 'red',
             default      => 'gray',
         };

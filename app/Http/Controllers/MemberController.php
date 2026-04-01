@@ -92,4 +92,52 @@ class MemberController extends Controller
         $order->load(['items.product', 'user']);
         return view('member.invoice', compact('order'));
     }
+
+    public function cancelOrder(Request $request, Order $order)
+    {
+        if ($order->user_id !== Auth::id() || $order->status !== 'pending') {
+            return back()->with('error', 'Pesanan tidak dapat dibatalkan.');
+        }
+
+        $order->update([
+            'status' => 'cancelled',
+            'cancel_reason' => $request->cancel_reason ?? 'Dibatalkan oleh pembeli',
+        ]);
+
+        return back()->with('success', 'Pesanan berhasil dibatalkan.');
+    }
+
+    public function completeOrder(Order $order)
+    {
+        if ($order->user_id !== Auth::id() || $order->status !== 'shipped') {
+            return back()->with('error', 'Pesanan tidak dapat diselesaikan.');
+        }
+
+        $order->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pesanan telah dikonfirmasi selesai. Silakan berikan ulasan Anda.');
+    }
+
+    public function storeReview(Request $request, Order $order)
+    {
+        if ($order->user_id !== Auth::id() || $order->status !== 'completed') {
+            return back()->with('error', 'Anda tidak dapat memberikan ulasan untuk pesanan ini.');
+        }
+
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'rating'     => 'required|integer|min:1|max:5',
+            'comment'    => 'nullable|string|max:1000',
+        ]);
+
+        \App\Models\Review::updateOrCreate(
+            ['user_id' => Auth::id(), 'product_id' => $request->product_id, 'order_id' => $order->id],
+            ['rating' => $request->rating, 'comment' => $request->comment]
+        );
+
+        return back()->with('success', 'Ulasan berhasil disimpan. Terima kasih atas tanggapan Anda!');
+    }
 }

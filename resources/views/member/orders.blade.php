@@ -54,14 +54,14 @@
                                             'pending'    => 'bg-amber-50 text-amber-700 border-amber-200',
                                             'processing' => 'bg-blue-50 text-blue-700 border-blue-200',
                                             'shipped'    => 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                                            'delivered'  => 'bg-green-50 text-green-700 border-green-200',
+                                            'completed'  => 'bg-green-50 text-green-700 border-green-200',
                                             'cancelled'  => 'bg-red-50 text-red-700 border-red-200',
                                         ];
                                         $labels = [
-                                            'pending'    => 'Menunggu Bayar',
+                                            'pending'    => 'Menunggu Konfirmasi',
                                             'processing' => 'Diproses',
                                             'shipped'    => 'Dikirim',
-                                            'delivered'  => 'Terkirim',
+                                            'completed'  => 'Selesai',
                                             'cancelled'  => 'Dibatalkan',
                                         ];
                                         $colorClass = $colors[$order->status] ?? 'bg-gray-50 text-gray-700 border-gray-200';
@@ -74,12 +74,103 @@
                                 <td class="px-6 py-4 text-gray-500 text-xs hidden lg:table-cell max-w-[200px]">
                                     {{ $order->shipping_address ?? '—' }}
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <a href="{{ route('member.orders.invoice', $order) }}" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-bold text-xs uppercase tracking-widest whitespace-nowrap">
+                                <td class="px-6 py-4 text-right space-y-3">
+                                    <a href="{{ route('member.orders.invoice', $order) }}" target="_blank" class="block text-black hover:text-indigo-600 transition-colors font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">
                                         Cetak Invoice
                                     </a>
+                                    
+                                    @if($order->status === 'pending')
+                                        <form method="POST" action="{{ route('member.orders.cancel', $order) }}" onsubmit="return confirm('Anda yakin ingin membatalkan pesanan ini?');">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="block w-full text-right text-red-600 hover:text-red-800 transition-colors font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">
+                                                Batalkan
+                                            </button>
+                                        </form>
+                                    @elseif($order->status === 'shipped')
+                                        <form method="POST" action="{{ route('member.orders.complete', $order) }}" onsubmit="return confirm('Apakah pesanan sudah Anda terima dengan baik?');">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="block w-full text-right text-indigo-600 hover:text-indigo-800 transition-colors font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">
+                                                Pesanan Diterima
+                                            </button>
+                                        </form>
+                                    @elseif($order->status === 'completed')
+                                        <button type="button" onclick="openReviewModal('{{ $order->id }}')" class="block w-full text-right text-green-600 hover:text-green-800 transition-colors font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">
+                                            Beri Ulasan
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
+                            
+                            @if($order->status === 'completed')
+                                <!-- Modal for Reviews (Hidden by default) -->
+                                <div id="review-modal-{{ $order->id }}" class="fixed inset-0 z-50 hidden bg-black/50 items-center justify-center backdrop-blur-sm">
+                                    <div class="bg-white rounded-[2rem] w-full max-w-lg p-8 relative shadow-2xl mx-4">
+                                        <button onclick="closeReviewModal('{{ $order->id }}')" class="absolute top-6 right-6 text-gray-400 hover:text-black transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                        <h3 class="text-2xl font-bold text-black tracking-tight mb-2">Beri Ulasan</h3>
+                                        <p class="text-gray-500 text-sm mb-6">Bagikan pengalaman Anda tentang produk dari pesanan {{ $order->order_number }}.</p>
+                                        
+                                        <div class="max-h-[60vh] overflow-y-auto pr-2">
+                                            @foreach($order->items as $item)
+                                                <div class="mb-6 pb-6 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+                                                    <div class="flex items-center gap-4 mb-4">
+                                                        <div class="w-16 h-16 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0">
+                                                            <img src="{{ $item->product && $item->product->image ? $item->product->image : 'https://placehold.co/100x100' }}" class="w-full h-full object-cover">
+                                                        </div>
+                                                        <div>
+                                                            <h4 class="font-bold text-sm text-black">{{ $item->product ? $item->product->name : 'Produk Tidak Diketahui' }}</h4>
+                                                            <p class="text-xs text-gray-500">{{ $item->quantity }}x</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    @if($item->product)
+                                                        @php
+                                                            $existingReview = \App\Models\Review::where('order_id', $order->id)->where('product_id', $item->product->id)->first();
+                                                        @endphp
+                                                        @if($existingReview)
+                                                            <div class="bg-gray-50 p-4 rounded-xl">
+                                                                <p class="text-[11px] font-bold text-green-600 uppercase tracking-widest mb-2 flex items-center gap-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                                                    Ulasan Tersimpan
+                                                                </p>
+                                                                <div class="flex text-amber-400 mb-1">
+                                                                    @for($i=1; $i<=5; $i++)
+                                                                        <svg class="w-3 h-3 {{ $i <= $existingReview->rating ? 'fill-current' : 'text-gray-300' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                                    @endfor
+                                                                </div>
+                                                                <p class="text-xs text-gray-600 italic">"{{ $existingReview->comment }}"</p>
+                                                            </div>
+                                                        @else
+                                                            <form action="{{ route('member.orders.review', $order) }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="product_id" value="{{ $item->product->id }}">
+                                                                <div class="mb-3">
+                                                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Rating</label>
+                                                                    <select name="rating" required class="w-full text-sm border-gray-200 rounded-lg focus:ring-black focus:border-black">
+                                                                        <option value="5">5 Bintang - Sangat Baik</option>
+                                                                        <option value="4">4 Bintang - Baik</option>
+                                                                        <option value="3">3 Bintang - Cukup</option>
+                                                                        <option value="2">2 Bintang - Kurang</option>
+                                                                        <option value="1">1 Bintang - Sangat Kurang</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Komentar</label>
+                                                                    <textarea name="comment" rows="2" class="w-full text-sm border-gray-200 rounded-lg focus:ring-black focus:border-black resize-none" placeholder="Tulis pengalaman Anda..."></textarea>
+                                                                </div>
+                                                                <button type="submit" class="w-full py-2 bg-black text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-gray-800 transition-colors">Kirim Ulasan</button>
+                                                            </form>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -93,4 +184,15 @@
             @endif
         @endif
     </div>
+
+    <script>
+        function openReviewModal(id) {
+            document.getElementById('review-modal-' + id).classList.remove('hidden');
+            document.getElementById('review-modal-' + id).classList.add('flex');
+        }
+        function closeReviewModal(id) {
+            document.getElementById('review-modal-' + id).classList.add('hidden');
+            document.getElementById('review-modal-' + id).classList.remove('flex');
+        }
+    </script>
 </x-member-layout>

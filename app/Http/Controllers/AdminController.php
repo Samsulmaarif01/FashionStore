@@ -151,9 +151,29 @@ class AdminController extends Controller
 
     public function updateOrderStatus(Request $request, Order $order)
     {
-        $request->validate(['status' => ['required', 'string', 'in:pending,processing,shipped,delivered,cancelled']]);
-        $order->update(['status' => $request->status]);
+        $request->validate([
+            'status' => ['required', 'string', 'in:pending,processing,shipped,completed,cancelled'],
+            'cancel_reason' => ['nullable', 'string', 'max:500']
+        ]);
+        
+        $data = ['status' => $request->status];
+
+        if ($request->status === 'shipped') {
+            $data['shipped_at'] = now();
+        } elseif ($request->status === 'completed') {
+            $data['completed_at'] = now();
+        } elseif ($request->status === 'cancelled') {
+            $data['cancel_reason'] = $request->cancel_reason;
+        }
+
+        $order->update($data);
         return back()->with('success', 'Status pesanan diperbarui.');
+    }
+
+    public function destroyOrder(Order $order)
+    {
+        $order->delete();
+        return back()->with('success', 'Riwayat pesanan berhasil dihapus.');
     }
 
     // ── Members ───────────────────────────────────────────────────────────────

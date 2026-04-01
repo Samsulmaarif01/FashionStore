@@ -1,168 +1,123 @@
 <x-layout>
-    <div class="bg-gray-50 min-h-screen py-12 md:py-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-12 md:mb-16 gsap-fade-up">
-                <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-black uppercase leading-none">Keranjang</h1>
-                <div class="w-16 h-1.5 bg-indigo-600 mt-6"></div>
-            </div>
-
+    <div class="bg-gray-50 min-h-screen py-10 md:py-20">
+        <div class="max-w-[1400px] w-full mx-auto px-4 sm:px-8 lg:px-12">
+            
             @if(count($cart) > 0)
-                <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
-                    <!-- Cart Items List -->
-                    <div class="w-full lg:flex-1 gsap-fade-up">
-                        <div class="bg-white shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-gray-100 overflow-hidden rounded-2xl">
-                            <!-- Mobile View Card Version -->
-                            <div class="block md:hidden divide-y divide-gray-50">
-                                @foreach($cart as $id => $details)
-                                    <div class="p-6">
-                                        <div class="flex gap-4">
-                                            <div class="w-24 h-32 bg-gray-50 overflow-hidden flex-shrink-0 rounded-xl">
-                                                <img src="{{ $details['image'] }}" class="w-full h-full object-cover grayscale">
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <div class="flex justify-between items-start">
-                                                    <a href="{{ route('product.detail', $details['slug']) }}" class="text-sm font-black text-black uppercase tracking-tight truncate pr-4">{{ $details['name'] }}</a>
-                                                    <form action="{{ route('cart.remove') }}" method="POST">
-                                                        @csrf @method('DELETE')
-                                                        <input type="hidden" name="id" value="{{ $id }}">
-                                                        <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Fashion Item</p>
-                                                <div class="mt-4 flex justify-between items-center">
-                                                    <div class="flex items-center gap-4 bg-gray-50 rounded-full px-4 py-1">
-                                                        <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] - 1 }})" class="text-gray-400 hover:text-black">-</button>
-                                                        <span class="text-xs font-black">{{ $details['quantity'] }}</span>
-                                                        <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] + 1 }})" class="text-gray-400 hover:text-black">+</button>
-                                                    </div>
-                                                    <div class="text-right">
-                                                        @if(isset($details['discount_percent']) && $details['discount_percent'] > 0)
-                                                            <span class="block text-[10px] text-gray-400 line-through">Rp {{ number_format($details['original_price'] * $details['quantity'], 0, ',', '.') }}</span>
-                                                        @endif
-                                                        <span class="text-sm font-black text-indigo-600">Rp {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                <div class="flex flex-col lg:flex-row gap-10 lg:gap-14 items-start">
+                    
+                    <!-- Cart List Section (White Box) -->
+                    <div class="w-full lg:w-2/3 bg-white p-8 md:p-14 shadow-sm relative z-10" style="border-radius: 2.5rem;">
+                        <h1 class="text-2xl font-bold text-black tracking-tight mb-8">Cart</h1>
 
-                            <!-- Desktop View Table Version -->
-                            <table class="hidden md:table w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-gray-50 border-b border-gray-100">
-                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Produk</th>
-                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Harga</th>
-                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Jumlah</th>
-                                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Total</th>
-                                        <th class="px-8 py-5"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($cart as $id => $details)
-                                        <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-all group">
-                                            <td class="px-8 py-8 font-medium">
-                                                <div class="flex items-center gap-6">
-                                                    <div class="w-20 h-28 bg-gray-100 overflow-hidden flex-shrink-0 rounded-xl">
-                                                        <img src="{{ $details['image'] }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
-                                                    </div>
-                                                    <div>
-                                                        <a href="{{ route('product.detail', $details['slug']) }}" class="text-sm font-black text-black hover:text-indigo-600 transition-colors uppercase tracking-tight">{{ $details['name'] }}</a>
-                                                        <p class="text-[9px] text-gray-400 mt-1 uppercase font-bold tracking-[0.2em]">Fashion Item</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-8 py-8">
-                                                @if(isset($details['discount_percent']) && $details['discount_percent'] > 0)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-[10px] text-gray-400 line-through">Rp {{ number_format($details['original_price'], 0, ',', '.') }}</span>
-                                                        <span class="text-sm font-bold text-gray-900 leading-none">Rp {{ number_format($details['price'], 0, ',', '.') }}</span>
-                                                    </div>
-                                                @else
-                                                    <span class="text-sm font-bold text-gray-900 leading-none">Rp {{ number_format($details['price'], 0, ',', '.') }}</span>
-                                                @endif
-                                            </td>
-                                            <td class="px-8 py-8">
-                                                <div class="flex items-center justify-center gap-4 bg-gray-50 rounded-full px-4 py-2 w-max mx-auto">
-                                                    <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] - 1 }})" class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-black transition-all focus:outline-none">-</button>
-                                                    <span class="text-xs font-black w-4 text-center">{{ $details['quantity'] }}</span>
-                                                    <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] + 1 }})" class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-black transition-all focus:outline-none">+</button>
-                                                </div>
-                                            </td>
-                                            <td class="px-8 py-8">
-                                                <span class="text-sm font-black text-indigo-600 leading-none">Rp {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }}</span>
-                                                @if(isset($details['discount_percent']) && $details['discount_percent'] > 0)
-                                                    <span class="block text-[9px] font-bold text-blue-600 uppercase mt-1">Hemat {{ $details['discount_percent'] }}%</span>
-                                                @endif
-                                            </td>
-                                            <td class="px-8 py-8 text-right">
-                                                <form action="{{ route('cart.remove') }}" method="POST" class="inline">
+                        <div class="flex flex-col">
+                            @foreach($cart as $id => $details)
+                                <div class="py-8 group flex items-start flex-col sm:flex-row gap-8 border-t border-gray-100/60 mt-4 first:border-0 first:mt-0">
+                                    
+                                    <!-- Product Image -->
+                                    <div class="w-28 sm:w-32 flex-shrink-0 bg-gray-100 overflow-hidden rounded-md border border-gray-50" style="aspect-ratio: 4/5; min-width: 7rem; max-width: 9rem;">
+                                        <img src="{{ $details['image'] }}" class="w-full h-full object-cover">
+                                    </div>
+
+                                    <!-- Product Info & Controls -->
+                                    <div class="flex-1 w-full min-w-0 flex flex-col sm:flex-row justify-between h-full">
+                                        
+                                        <!-- Details (Left) -->
+                                        <div class="flex flex-col flex-1 pb-4 sm:pb-0">
+                                            <a href="{{ route('product.detail', $details['slug']) }}" class="text-[15px] font-bold text-black hover:text-gray-500 transition-colors tracking-tight mb-2">{{ $details['name'] }}</a>
+                                            
+                                            <div class="space-y-1 mt-1">
+                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Variant: Default</p>
+                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Size: L</p>
+                                                <p class="text-[13px] text-gray-400 font-medium tracking-tight">Color: Black</p>
+                                            </div>
+
+                                            <div class="flex items-center gap-5 mt-auto pt-6 text-gray-400">
+                                                <button class="hover:text-black transition-colors" aria-label="Save for later">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                                </button>
+                                                <form action="{{ route('cart.remove') }}" method="POST" class="flex items-center">
                                                     @csrf @method('DELETE')
                                                     <input type="hidden" name="id" value="{{ $id }}">
-                                                    <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors bg-white hover:bg-red-50 p-2 rounded-full border border-transparent hover:border-red-100">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                    <button type="submit" class="hover:text-black transition-colors" aria-label="Remove item">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                                     </button>
                                                 </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Price & Qty (Right) -->
+                                        <div class="flex flex-col items-start sm:items-end w-full sm:w-auto mt-4 sm:mt-0 pt-4 sm:pt-0 sm:border-t-0 border-gray-100/60">
+                                            <div class="text-right">
+                                                <span class="text-[15px] font-bold text-black tracking-tight block">Rp {{ number_format($details['price'], 0, ',', '.') }}</span>
+                                                @if(isset($details['discount_percent']) && $details['discount_percent'] > 0)
+                                                    <span class="text-xs text-gray-400 line-through block mt-1">Rp {{ number_format($details['original_price'], 0, ',', '.') }}</span>
+                                                @endif
+                                            </div>
+
+                                            <div class="flex items-center gap-4 mt-6 text-gray-400">
+                                                <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] - 1 }})" class="hover:text-black focus:outline-none transition-all">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                                </button>
+                                                <span class="text-[13px] font-bold w-4 text-center text-black leading-none">{{ $details['quantity'] }}</span>
+                                                <button onclick="updateCart('{{ $id }}', {{ $details['quantity'] + 1 }})" class="hover:text-black focus:outline-none transition-all">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
-                    <!-- Summary -->
-                    <div class="w-full lg:w-[400px] gsap-fade-up" style="animation-delay: 200ms;">
-                        <div class="bg-black text-white p-8 md:p-12 shadow-2xl relative rounded-3xl overflow-hidden">
-                            <h3 class="text-lg font-black uppercase tracking-[0.2em] mb-12 flex items-center gap-4">
-                                <span class="w-2 h-10 bg-indigo-600"></span>
-                                Total Bayar
-                            </h3>
-                                                        <div class="space-y-8">
-                                    @php
-                                        $originalSubtotal = 0;
-                                        foreach($cart as $item) {
-                                            $itemOrigPrice = $item['original_price'] ?? $item['price'];
-                                            $originalSubtotal += (float)$itemOrigPrice * (int)$item['quantity'];
-                                        }
-                                        $totalSavings = max(0, $originalSubtotal - $total);
-                                    @endphp
-                                    <div class="flex justify-between items-center text-gray-500">
-                                        <span class="text-[10px] font-black uppercase tracking-widest">Subtotal</span>
-                                        <div class="text-right">
-                                            @if($totalSavings > 0)
-                                                <span class="block text-[10px] text-gray-500 line-through">Rp {{ number_format($originalSubtotal, 0, ',', '.') }}</span>
-                                            @endif
-                                            <span class="text-sm font-bold text-white">Rp {{ number_format($total, 0, ',', '.') }}</span>
-                                        </div>
-                                    </div>
-                                    @if($totalSavings > 0)
-                                        <div class="flex justify-between items-center text-blue-400">
-                                            <span class="text-[10px] font-black uppercase tracking-widest">Hemat</span>
-                                            <span class="text-sm font-bold">-Rp {{ number_format($totalSavings, 0, ',', '.') }}</span>
-                                        </div>
-                                    @endif
-                                    <div class="flex justify-between items-center text-gray-500">
-                                        <span class="text-[10px] font-black uppercase tracking-widest">Pengiriman</span>
-                                        <span class="text-[10px] uppercase font-black text-indigo-400 tracking-widest">Gratis</span>
-                                    </div>
-                                <div class="pt-10 mt-6 border-t border-white/10">
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mt-2">Total Harga</span>
-                                        <div class="text-right">
-                                            <span class="block text-indigo-400 text-xs font-black uppercase tracking-widest mb-1">Rp</span>
-                                            <span class="text-4xl font-black text-white tracking-tighter leading-none">{{ number_format($total, 0, ',', '.') }}</span>
-                                        </div>
-                                    </div>
+                    <!-- Order Summary Section -->
+                    <div class="w-full lg:w-1/3 sticky top-28 pt-4 md:pt-14 px-2 lg:px-6">
+                        <div class="space-y-6">
+                            <h2 class="text-xl font-bold text-black tracking-tight mb-8">Order Summary</h2>
+
+                            <div class="space-y-4">
+                                @php
+                                    $originalSubtotal = 0;
+                                    foreach($cart as $item) {
+                                        $itemOrigPrice = $item['original_price'] ?? $item['price'];
+                                        $originalSubtotal += (float)$itemOrigPrice * (int)$item['quantity'];
+                                    }
+                                    $totalSavings = max(0, $originalSubtotal - $total);
+                                @endphp
+
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500 text-[15px] font-normal">Subtotal</span>
+                                    <span class="text-black font-bold text-[15px] tracking-tight">Rp {{ number_format($originalSubtotal, 0, ',', '.') }}</span>
                                 </div>
-                                
-                                <a href="{{ route('checkout.index') }}" class="block w-full bg-indigo-600 text-white py-6 mt-12 font-black text-center uppercase tracking-[0.4em] text-[10px] hover:bg-white hover:text-black transition-all duration-500 shadow-xl group flex items-center justify-center gap-4 rounded-xl">
-                                    Proses Checkout
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                                </a>
+
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500 text-[15px] font-normal">Delivery</span>
+                                    <span class="text-black font-bold text-[15px] tracking-tight">Rp 0</span>
+                                </div>
+
+                                @if($totalSavings > 0)
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-500 text-[15px] font-normal">Discount</span>
+                                        <span class="text-black font-bold text-[15px] tracking-tight">-Rp {{ number_format($totalSavings, 0, ',', '.') }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-1">
+                                         <span class="w-full text-right text-gray-200">_</span>
+                                    </div>
+                                @endif
+
+                                <div class="pt-6 border-t border-gray-200 flex justify-between items-end mb-6">
+                                    <span class="text-lg font-bold text-black tracking-tight">Total</span>
+                                    <span class="text-[20px] font-bold text-black tracking-tight leading-none">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
+                            
+                            <a href="{{ route('checkout.index') }}" class="block w-full bg-black text-white py-[14px] mt-6 font-medium text-center text-[13px] hover:bg-gray-800 transition-all rounded-md">
+                                Checkout
+                            </a>
+
+                            <div class="mt-4 border-b border-gray-300 inline-block pb-0.5" style="border-bottom: 1px solid rgba(0,0,0,0.15)">
+                                <a href="#" class="text-[13px] text-gray-500 font-normal hover:text-black transition-colors">Use a promo code</a>
                             </div>
                         </div>
                     </div>

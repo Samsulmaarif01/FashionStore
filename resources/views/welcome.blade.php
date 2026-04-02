@@ -123,90 +123,140 @@
         </div>
     </section>
 
-    <!-- Section Kontak Kami -->
-    <section id="contact" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="gsap-fade-up">
-                    <h2 class="text-xs font-black tracking-[0.3em] text-indigo-600 uppercase mb-4">Terhubung</h2>
-                    <h3 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-black mb-8 leading-none">Kontak Kami</h3>
-                    <p class="text-gray-500 mb-10 leading-relaxed max-w-md font-medium text-sm">
-                        Apakah Anda memiliki pertanyaan tentang koleksi kami atau membutuhkan bantuan dengan pesanan? Tim kami siap membantu Anda dengan layanan personal.
-                    </p>
-                    
-                    <div class="space-y-6">
+    <!-- Kontak Kami Section -->
+    <section id="contact" class="py-32 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+
+            <!-- Section Header -->
+            <div class="text-center mb-16 gsap-fade-up">
+                <span class="inline-block text-[10px] font-black tracking-[0.5em] text-indigo-600 uppercase mb-4">Terhubung Bersama Kami</span>
+                <h2 class="text-4xl md:text-6xl font-black tracking-tighter text-black leading-none uppercase">Kontak Kami</h2>
+                <div class="flex justify-center mt-6">
+                    <div class="w-16 h-1 bg-black rounded-full"></div>
+                    <div class="w-4 h-1 bg-indigo-600 rounded-full ml-1"></div>
+                </div>
+            </div>
+
+            <!-- 2-Column Card -->
+            <div class="gsap-fade-up group grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.1)] border border-gray-100 transition-all duration-700 hover:shadow-[0_50px_120px_rgba(0,0,0,0.14)]">
+
+                <!-- ===== LEFT: Info Panel ===== -->
+                <div class="bg-black text-white p-12 xl:p-16 flex flex-col justify-between relative overflow-hidden">
+                    <!-- Decorative blobs -->
+                    <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-600/25 rounded-full blur-3xl pointer-events-none group-hover:scale-150 transition-transform duration-1000"></div>
+                    <div class="absolute -bottom-10 -left-10 w-36 h-36 bg-indigo-900/30 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <!-- Top: Icon + Heading -->
+                    <div class="relative z-10">
+                        <div class="inline-flex w-12 h-12 rounded-2xl bg-indigo-600 items-center justify-center mb-8 shadow-xl shadow-indigo-900/60">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                        </div>
+                        <h3 class="text-3xl xl:text-4xl font-black tracking-tight leading-tight mb-5 uppercase">
+                            Ada yang bisa<br>kami <span class="text-indigo-400">bantu?</span>
+                        </h3>
+                        <p class="text-gray-400 text-sm font-light leading-relaxed max-w-xs">
+                            Tim kami siap melayani pertanyaan seputar produk, pesanan, dan gaya hidup fashion Anda setiap hari.
+                        </p>
+                    </div>
+
+                    <!-- Bottom: Contact Details -->
+                    <div class="relative z-10 mt-16 space-y-7">
+                        <!-- Location -->
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-xl border border-gray-100 text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
+                            <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                             </div>
                             <div>
-                                <h4 class="font-black text-black uppercase tracking-widest text-xs mb-1">Butik Utama</h4>
-                                <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">Jl. Mode No. 123, Jakarta Selatan</p>
+                                <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.35em] mb-1">Lokasi</p>
+                                <p class="text-sm font-semibold text-white/90">Jl. Mode No. 123, Jakarta Selatan</p>
                             </div>
                         </div>
-                        
+
+                        <!-- Email -->
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-50 flex items-center justify-center rounded-xl border border-gray-100 text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
+                            <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                             </div>
                             <div>
-                                <h4 class="font-black text-black uppercase tracking-widest text-xs mb-1">Email</h4>
-                                <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">hello@velour.com</p>
+                                <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.35em] mb-1">Email</p>
+                                <p class="text-sm font-semibold text-white/90">hello@velour.com</p>
+                            </div>
+                        </div>
+
+                        <!-- Hours -->
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.35em] mb-1">Jam Operasional</p>
+                                <p class="text-sm font-semibold text-white/90">Senin – Sabtu, 09.00 – 21.00</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="gsap-fade-up bg-gray-50 p-8 md:p-14 border border-gray-100 relative overflow-hidden rounded-[2rem] shadow-sm">
-                    <!-- Subtle decorative element -->
-                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-50 rounded-full opacity-30"></div>
-                    
+                <!-- ===== RIGHT: Form Panel ===== -->
+                <div class="bg-white p-12 xl:p-16 flex flex-col justify-center">
                     @if(session('success'))
-                        <div class="relative z-10 mb-8 p-6 bg-black text-white rounded-2xl flex items-center gap-4 animate-bounce">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <div class="mb-8 p-5 bg-indigo-600 text-white rounded-2xl flex items-center gap-4 shadow-lg shadow-indigo-200">
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            </div>
                             <span class="text-xs font-black uppercase tracking-widest">{{ session('success') }}</span>
                         </div>
                     @endif
 
-                    @if($errors->any())
-                        <div class="relative z-10 mb-8 p-6 bg-red-50 text-red-600 rounded-2xl border border-red-100">
-                            <ul class="list-disc list-inside text-[10px] font-black uppercase tracking-widest space-y-1">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                    <div class="mb-8">
+                        <h4 class="text-2xl font-black text-black tracking-tight">Kirim Pesan</h4>
+                        <p class="text-sm text-gray-400 font-light mt-2 leading-relaxed">Isi formulir di bawah dan kami akan menghubungi Anda dalam waktu 1x24 jam.</p>
+                    </div>
 
-                    <form action="{{ route('contact.store') }}" method="POST" class="relative z-10 space-y-8">
+                    <form action="{{ route('contact.store') }}" method="POST" class="space-y-5">
                         {{ csrf_field() }}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Nama</label>
-                                <input type="text" name="name" required class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all text-xs font-bold shadow-sm tracking-wider" placeholder="Nama Anda">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-[9px] font-black uppercase tracking-[0.4em] text-gray-500">Nama Lengkap</label>
+                                <input
+                                    type="text" name="name" required
+                                    placeholder="Masukkan nama Anda..."
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 px-5 text-sm font-medium text-gray-800 placeholder-gray-300 outline-none focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 transition-all duration-300"
+                                >
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Email</label>
-                                <input type="email" name="email" required class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all text-xs font-bold shadow-sm tracking-wider" placeholder="email@contoh.com">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-[9px] font-black uppercase tracking-[0.4em] text-gray-500">Alamat Email</label>
+                                <input
+                                    type="email" name="email" required
+                                    placeholder="email@velour.com"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 px-5 text-sm font-medium text-gray-800 placeholder-gray-300 outline-none focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 transition-all duration-300"
+                                >
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Pesan</label>
-                            <textarea name="message" rows="5" required class="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all text-xs font-bold shadow-sm resize-none tracking-wider" placeholder="Bagaimana kami bisa membantu?"></textarea>
+
+                        <div class="flex flex-col gap-2">
+                            <label class="text-[9px] font-black uppercase tracking-[0.4em] text-gray-500">Pesan Anda</label>
+                            <textarea
+                                name="message" required rows="6"
+                                placeholder="Ceritakan apa yang membutuhkan bantuan kami..."
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 px-5 text-sm font-medium text-gray-800 placeholder-gray-300 outline-none focus:border-black focus:bg-white focus:ring-4 focus:ring-black/5 transition-all duration-300 resize-none"
+                            ></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-black text-white font-black py-6 uppercase tracking-[0.4em] text-[10px] hover:bg-indigo-600 transition-all duration-500 rounded-2xl shadow-xl hover:-translate-y-1">
-                            Kirim Pesan
+
+                        <button
+                            type="submit"
+                            class="group relative w-full overflow-hidden rounded-xl py-4 bg-black text-white text-xs font-black uppercase tracking-[0.4em] transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_15px_40px_rgba(0,0,0,0.25)]"
+                        >
+                            <span class="relative z-10">Kirim Pesan Sekarang</span>
+                            <div class="absolute inset-0 bg-indigo-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
                         </button>
                     </form>
                 </div>
+
             </div>
         </div>
     </section>
+
 
     <!-- Alpine.js & custom JS specifically for this page features can be in app.js or here -->
     <script>

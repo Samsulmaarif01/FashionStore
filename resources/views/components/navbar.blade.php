@@ -3,7 +3,7 @@
         ['label' => 'Beranda', 'url' => '/'],
         ['label' => 'Koleksi', 'url' => route('collection')],
         ['label' => 'Tentang Kami', 'url' => route('about')],
-        ['label' => 'Kontak Kami', 'url' => '#contact'],
+        ['label' => 'Kontak Kami', 'url' => Request::is('/') || Request::is('home') ? '#contact' : url('/#contact')],
     ];
 @endphp
 

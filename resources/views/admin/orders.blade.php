@@ -76,6 +76,12 @@
                                                 </form>
                                             @endif
                                             
+                                            <a href="{{ route('admin.orders.invoice', $order) }}" target="_blank" class="p-1.5 text-indigo-600 hover:text-indigo-800 transition-colors" title="Cetak Invoice">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                                </svg>
+                                            </a>
+                                            
                                             <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" onsubmit="return confirm('Anda yakin ingin menghapus riwayat pesanan ini secara permanen?');" class="inline-block ml-2">
                                                 @csrf
                                                 @method('DELETE')

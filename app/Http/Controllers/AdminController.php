@@ -149,6 +149,12 @@ class AdminController extends Controller
         return view('admin.orders', compact('orders'));
     }
 
+    public function printInvoice(Order $order)
+    {
+        $order->load(['items.product', 'user']);
+        return view('member.invoice', compact('order'));
+    }
+
     public function updateOrderStatus(Request $request, Order $order)
     {
         $request->validate([

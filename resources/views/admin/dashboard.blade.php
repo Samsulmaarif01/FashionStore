@@ -82,8 +82,17 @@
                                         <p class="font-bold text-black text-xs">{{ $order->user->name }}</p>
                                     </td>
                                     <td class="px-6 py-4 text-right">
-                                        <p class="font-bold text-black text-xs">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</p>
-                                        <p class="text-[10px] text-gray-400 uppercase font-black tracking-widest">{{ $order->status }}</p>
+                                        <div class="flex items-center justify-end gap-3">
+                                            <div class="text-right">
+                                                <p class="font-bold text-black text-xs">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</p>
+                                                <p class="text-[10px] text-gray-400 uppercase font-black tracking-widest">{{ $order->status }}</p>
+                                            </div>
+                                            <a href="{{ route('admin.orders.invoice', $order) }}" target="_blank" class="p-1.5 text-indigo-600 hover:text-indigo-800 transition-colors" title="Cetak Invoice">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                                </svg>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

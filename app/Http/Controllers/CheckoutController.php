@@ -69,7 +69,11 @@ class CheckoutController extends Controller
 
             foreach ($cart as $id => $item) {
                 // Check and decrement stock
-                $product = Product::lockForUpdate()->find($id);
+                $product = Product::lockForUpdate()->find($item['product_id']);
+                if (!$product) {
+                    throw new \Exception('Produk tidak ditemukan.');
+                }
+                
                 if ($product->stock < $item['quantity']) {
                     throw new \Exception('Stok untuk ' . $product->name . ' tidak mencukupi.');
                 }
@@ -78,7 +82,7 @@ class CheckoutController extends Controller
 
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $id,
+                    'product_id' => $item['product_id'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                 ]);

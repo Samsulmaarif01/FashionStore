@@ -90,7 +90,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="text-[10px] text-gray-400 mt-4 uppercase tracking-widest font-bold font-mono">Tip: Klik 'Edit' untuk mengubah nama kategori.</p>
+            <p class="text-[10px] text-gray-400 mt-4 uppercase tracking-widest font-bold">Tips: Klik 'Edit' untuk mengubah nama kategori.</p>
         </div>
     </div>
 </x-admin-layout>

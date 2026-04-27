@@ -32,25 +32,11 @@
                                         placeholder="Contoh: Budi Santoso" required>
                                 </div>
                                 
-                                <div>
+                                <div class="md:col-span-2">
                                     <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Nomor WhatsApp</label>
                                     <input type="text" name="phone" value="{{ auth()->user()->phone ?? '' }}" 
                                         class="w-full bg-white border border-gray-200 px-5 py-4 text-[15px] font-medium text-black focus:border-black focus:ring-1 focus:ring-black transition-all rounded-xl placeholder-gray-300" 
                                         placeholder="0812XXXXXXXX" required>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Metode Pembayaran</label>
-                                    <div class="relative">
-                                        <select name="payment_method" class="w-full bg-white border border-gray-200 px-5 py-4 text-[15px] font-medium text-black focus:border-black focus:ring-1 focus:ring-black transition-all appearance-none cursor-pointer rounded-xl" required>
-                                            <option value="bank_transfer">Transfer Bank (BCA/Mandiri)</option>
-                                            <option value="qris">QRIS / E-Wallet</option>
-                                            <option value="cod">Bayar di Tempat (COD)</option>
-                                        </select>
-                                        <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="md:col-span-2">

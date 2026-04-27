@@ -26,7 +26,6 @@ class PaymentController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'address' => 'required|string',
-            'payment_method' => 'required|string',
         ]);
 
         try {
@@ -43,7 +42,7 @@ class PaymentController extends Controller
                 'status' => 'pending',
                 'total_amount' => $total,
                 'shipping_address' => $request->address,
-                'payment_method' => $request->payment_method,
+                'payment_method' => 'xendit',
                 'notes' => 'Nama: ' . $request->name . ' | Telp: ' . $request->phone,
             ]);
 
@@ -97,6 +96,7 @@ class PaymentController extends Controller
     {
         $external_id = $request->input('external_id');
         $status = $request->input('status');
+        $payment_channel = $request->input('payment_channel') ?? $request->input('payment_method') ?? 'xendit';
 
         $order = Order::where('order_number', $external_id)->first();
 
@@ -105,6 +105,7 @@ class PaymentController extends Controller
                 $order->update([
                     'status' => 'processing',
                     'paid_at' => now(),
+                    'payment_method' => $payment_channel,
                 ]);
             } elseif ($status === 'EXPIRED') {
                 $order->update([

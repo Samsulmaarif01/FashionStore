@@ -30,34 +30,23 @@
                     <!-- Payment Instructions -->
                     <div>
                         <h3 class="text-[17px] font-bold text-black tracking-tight mb-6 text-center md:text-left">
-                            Instruksi Pembayaran
+                            Status Pembayaran
                         </h3>
                         
-                        @if($order->payment_method == 'bank_transfer')
-                            <div class="bg-[#fafafa] p-8 md:p-10 flex flex-col md:flex-row justify-between items-center gap-8 rounded-2xl">
-                                <div class="text-center md:text-left">
-                                    <div class="flex items-center gap-3 justify-center md:justify-start mb-4">
-                                        <div class="w-10 h-6 bg-black rounded-sm flex items-center justify-center text-[10px] font-bold text-white tracking-widest">BCA</div>
-                                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Bank Central Asia</p>
-                                    </div>
-                                    <p class="text-2xl md:text-3xl font-bold text-black tracking-tight">883 0921 112</p>
-                                    <p class="text-[13px] font-medium text-gray-500 mt-2 px-3 py-1 bg-white border border-gray-200 inline-block rounded-md">A.N. Velour Global Retail</p>
-                                </div>
-                                <button class="w-full md:w-auto px-8 py-4 bg-black text-white text-[13px] font-medium hover:bg-gray-800 transition-all rounded-lg">
-                                    Salin Rekening
-                                </button>
+                        @if($order->status == 'processing' || $order->status == 'completed' || $order->status == 'shipped')
+                            <div class="bg-[#fafafa] border border-green-100 p-8 md:p-10 rounded-2xl text-center md:text-left">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-green-600 mb-3">Pembayaran Berhasil</p>
+                                <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl">Terima kasih, pembayaran Anda telah kami terima{{ $order->payment_method && $order->payment_method != 'xendit' ? ' (Metode: ' . strtoupper($order->payment_method) . ')' : '' }}. Pesanan Anda sedang diproses oleh tim kami.</p>
                             </div>
-                        @elseif($order->payment_method == 'qris')
-                            <div class="bg-[#fafafa] p-10 text-center rounded-2xl">
-                                <div class="w-48 h-48 md:w-56 md:h-56 bg-white mx-auto mb-6 border border-gray-100 p-4 rounded-xl shadow-sm">
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VelourStore-{{ $order->order_number }}" alt="QRIS" class="w-full h-full object-contain">
-                                </div>
-                                <p class="text-[14px] font-medium text-gray-500 max-w-sm mx-auto leading-relaxed">Pindai kode QR di atas menggunakan aplikasi m-banking atau e-wallet Anda.</p>
+                        @elseif($order->status == 'pending')
+                            <div class="bg-[#fafafa] border border-amber-100 p-8 md:p-10 rounded-2xl text-center md:text-left">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-amber-600 mb-3">Menunggu Pembayaran</p>
+                                <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl">Sistem kami sedang memverifikasi pembayaran Anda melalui Xendit. Jika Anda belum menyelesaikan pembayaran, silakan periksa email Anda atau tautan Xendit untuk instruksi lebih lanjut.</p>
                             </div>
                         @else
-                            <div class="bg-[#fafafa] p-8 md:p-10 rounded-2xl text-center md:text-left">
-                                <p class="text-xs font-semibold uppercase tracking-wider text-black mb-3">Bayar di Tempat (COD)</p>
-                                <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl">Silakan siapkan dana tunai sebesar <span class="text-black font-bold">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span> untuk diserahkan kepada kurir saat pesanan Anda sampai tujuan.</p>
+                            <div class="bg-[#fafafa] border border-gray-200 p-8 md:p-10 rounded-2xl text-center md:text-left">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-800 mb-3">Status: {{ $order->getStatusLabelAttribute() }}</p>
+                                <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl">Pesanan ini telah dibatalkan atau kedaluwarsa.</p>
                             </div>
                         @endif
                     </div>

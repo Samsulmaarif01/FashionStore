@@ -66,9 +66,6 @@
                     <span class="w-28 text-gray-500 font-medium">Pembayaran</span>
                     <span class="font-bold text-gray-900 flex items-center gap-2">
                         : {{ strtoupper(str_replace('_', ' ', $order->payment_method)) }}
-                        @if($order->payment_method == 'bank_transfer')
-                            <span class="px-2 py-0.5 bg-indigo-900 text-[8px] text-white rounded font-black italic">BCA</span>
-                        @endif
                     </span>
                 </div>
             </div>

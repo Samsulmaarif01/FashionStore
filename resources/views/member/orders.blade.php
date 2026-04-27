@@ -70,6 +70,9 @@
                                     <span class="inline-block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-md {{ $colorClass }}">
                                         {{ $label }}
                                     </span>
+                                    @if($order->status === 'cancelled' && $order->cancel_reason)
+                                        <p class="text-[10px] text-red-500 mt-1 italic max-w-[150px]">Alasan: {{ $order->cancel_reason }}</p>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 text-xs hidden lg:table-cell max-w-[200px]">
                                     {{ $order->shipping_address ?? '—' }}

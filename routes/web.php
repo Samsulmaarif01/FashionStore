@@ -108,6 +108,9 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::get('/reviews', [MemberController::class, 'reviews'])->name('reviews');
     Route::patch('/reviews/{review}', [MemberController::class, 'updateReview'])->name('reviews.update');
     Route::delete('/reviews/{review}', [MemberController::class, 'destroyReview'])->name('reviews.destroy');
+    
+    // Inbox
+    Route::get('/inbox', [MemberController::class, 'inbox'])->name('inbox');
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Inbox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -170,6 +171,14 @@ class AdminController extends Controller
             $data['completed_at'] = now();
         } elseif ($request->status === 'cancelled') {
             $data['cancel_reason'] = $request->cancel_reason;
+            
+            if ($order->paid_at) {
+                Inbox::create([
+                    'user_id' => $order->user_id,
+                    'title'   => 'Pesanan Dibatalkan - Refund',
+                    'message' => 'Pesanan Anda (' . $order->order_number . ') telah dibatalkan dengan alasan: ' . ($request->cancel_reason ?: 'Dibatalkan oleh Admin') . '. Dana akan di refund manual oleh Velour. Jika 1x24 jam dana tidak dikembalikan, silakan kontak admin Velour.',
+                ]);
+            }
         }
 
         $order->update($data);
@@ -178,6 +187,21 @@ class AdminController extends Controller
 
     public function destroyOrder(Order $order)
     {
+        $isPaid = $order->paid_at || in_array($order->status, ['processing', 'shipped', 'completed']);
+        
+        // Block deletion if paid and NOT completed/cancelled
+        if ($isPaid && !in_array($order->status, ['completed', 'cancelled'])) {
+            return back()->with('error', 'Pesanan yang sudah dibayar dan masih aktif (diproses/dikirim) tidak bisa dihapus.');
+        }
+
+        if ($isPaid) {
+            Inbox::create([
+                'user_id' => $order->user_id,
+                'title'   => 'Pesanan Dihapus - Refund',
+                'message' => 'Pesanan Anda (' . $order->order_number . ') telah dihapus dari sistem. Dana akan di refund manual oleh Velour. Jika 1x24 jam dana tidak dikembalikan, silakan kontak admin Velour.',
+            ]);
+        }
+
         $order->delete();
         return back()->with('success', 'Riwayat pesanan berhasil dihapus.');
     }

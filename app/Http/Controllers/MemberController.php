@@ -171,4 +171,14 @@ class MemberController extends Controller
         $review->delete();
         return back()->with('success', 'Ulasan berhasil dihapus.');
     }
+
+    public function inbox()
+    {
+        $inboxes = Auth::user()->inboxes()->latest()->paginate(10);
+        
+        // Mark all as read when opened
+        Auth::user()->inboxes()->where('is_read', false)->update(['is_read' => true]);
+        
+        return view('member.inbox', compact('inboxes'));
+    }
 }

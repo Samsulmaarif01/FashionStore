@@ -2,9 +2,25 @@
 
 <x-admin-layout :title="$title">
     @if (session('success'))
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center gap-2 rounded-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            {{ session('success') }}
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center justify-between gap-2 rounded-xl">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                {{ session('success') }}
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-green-600 hover:text-green-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-sm text-red-700 font-medium flex items-center justify-between gap-2 rounded-xl">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {{ session('error') }}
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-red-600 hover:text-red-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
     @endif
 
@@ -59,20 +75,22 @@
                                                     <input type="hidden" name="status" value="processing">
                                                     <button type="submit" class="px-3 py-1.5 bg-black text-white text-[11px] font-medium hover:bg-gray-800 transition-colors rounded-md">Proses Pesanan</button>
                                                 </form>
-                                                
-                                                <button type="button" onclick="cancelOrder('{{ $order->id }}')" class="px-3 py-1.5 bg-white border border-gray-200 text-red-600 text-[11px] font-medium hover:bg-red-50 transition-colors rounded-md">Batalkan</button>
-                                                <form id="cancel-form-{{ $order->id }}" method="POST" action="{{ route('admin.orders.status', $order) }}" class="hidden">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <input type="hidden" name="status" value="cancelled">
-                                                    <input type="hidden" name="cancel_reason" id="reason-{{ $order->id }}">
-                                                </form>
                                             @elseif($order->status === 'processing')
                                                 <form method="POST" action="{{ route('admin.orders.status', $order) }}" class="inline-block">
                                                     @csrf
                                                     @method('PATCH')
                                                     <input type="hidden" name="status" value="shipped">
                                                     <button type="submit" class="px-3 py-1.5 bg-indigo-600 text-white text-[11px] font-medium hover:bg-indigo-700 transition-colors rounded-md">Tandai Dikirim</button>
+                                                </form>
+                                            @endif
+                                            
+                                            @if($order->status === 'pending' || $order->status === 'processing')
+                                                <button type="button" onclick="cancelOrder('{{ $order->id }}')" class="px-3 py-1.5 bg-white border border-gray-200 text-red-600 text-[11px] font-medium hover:bg-red-50 transition-colors rounded-md">Batalkan</button>
+                                                <form id="cancel-form-{{ $order->id }}" method="POST" action="{{ route('admin.orders.status', $order) }}" class="hidden">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="cancelled">
+                                                    <input type="hidden" name="cancel_reason" id="reason-{{ $order->id }}">
                                                 </form>
                                             @endif
                                             

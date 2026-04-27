@@ -13,7 +13,7 @@
                 <p class="text-gray-500 mt-2 text-sm font-medium">Lengkapi detail pengiriman Anda untuk menyelesaikan pesanan.</p>
             </div>
 
-            <form action="{{ route('checkout.process') }}" method="POST" class="w-full">
+            <form action="{{ route('payment.createInvoice') }}" method="POST" class="w-full">
                 @csrf
                 <div class="flex flex-col lg:flex-row gap-10 lg:gap-14 items-start w-full">
                     
@@ -136,7 +136,7 @@
                             </div>
                             
                             <button type="submit" class="block w-full bg-black text-white py-[14px] mt-6 font-medium text-center text-[13px] hover:bg-gray-800 transition-all rounded-md">
-                                SELESAIKAN PESANAN
+                                Bayar Sekarang
                             </button>
                             
                             <div class="text-center mt-6">

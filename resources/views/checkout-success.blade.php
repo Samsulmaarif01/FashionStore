@@ -39,9 +39,9 @@
                                 <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl">Terima kasih, pembayaran Anda telah kami terima{{ $order->payment_method && $order->payment_method != 'xendit' ? ' (Metode: ' . strtoupper($order->payment_method) . ')' : '' }}. Pesanan Anda sedang diproses oleh tim kami.</p>
                             </div>
                         @elseif($order->status == 'pending')
-                            <div class="bg-[#fafafa] border border-amber-100 p-8 md:p-10 rounded-2xl text-center md:text-left">
-                                <p class="text-xs font-semibold uppercase tracking-wider text-amber-600 mb-3">Menunggu Pembayaran</p>
-                                <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl">Sistem kami sedang memverifikasi pembayaran Anda melalui Xendit. Jika Anda belum menyelesaikan pembayaran, silakan periksa email Anda atau tautan Xendit untuk instruksi lebih lanjut.</p>
+                            <div class="bg-[#fafafa] border border-green-100 p-8 md:p-10 rounded-2xl text-center md:text-left">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-green-600 mb-3">Pesanan Berhasil Dibuat</p>
+                                <p class="text-[14px] font-medium text-gray-500 leading-relaxed max-w-2xl text-justify">Tim Velour sedang memproses dan menyiapkan pesanan Anda dengan penuh perhatian. Setiap produk akan dikemas secara rapi dan aman agar tiba dalam kondisi terbaik. Kami berkomitmen memberikan pelayanan yang profesional sehingga pengalaman berbelanja Anda bersama Velour selalu memuaskan.</p>
                             </div>
                         @else
                             <div class="bg-[#fafafa] border border-gray-200 p-8 md:p-10 rounded-2xl text-center md:text-left">

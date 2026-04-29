@@ -81,16 +81,19 @@
                     Produk Kosong
                 </button>
             @else
-                <form action="{{ route('cart.add', $product) }}" method="POST" class="flex-1">
+                <form action="{{ route('cart.add', $product) }}" method="POST" class="flex-1 flex gap-2">
                     @csrf
-                    <button type="submit" class="w-full bg-black text-white py-3 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors duration-300 relative z-20 cursor-pointer">
-                        Tambah ke Keranjang
+                    <button type="submit" class="flex-1 bg-black text-white py-2 px-1 text-[9px] font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors duration-300 relative z-20 cursor-pointer">
+                        + Keranjang
+                    </button>
+                    <button type="submit" name="buy_now" value="1" class="flex-1 bg-indigo-600 text-white py-2 px-1 text-[9px] font-bold uppercase tracking-wider hover:bg-indigo-700 transition-colors duration-300 relative z-20 cursor-pointer">
+                        Beli Langsung
                     </button>
                 </form>
             @endif
             <form action="{{ route('member.wishlist.toggle', $product) }}" method="POST" class="relative z-20">
                 @csrf
-                <button type="submit" class="p-3 border border-gray-200 {{ auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-400' }} hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer">
+                <button type="submit" class="p-2.5 border border-gray-200 {{ auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-400' }} hover:text-red-500 hover:border-red-500 transition-colors cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="{{ auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>

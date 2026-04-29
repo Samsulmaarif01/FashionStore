@@ -63,6 +63,11 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
+
+        if ($request->has('buy_now')) {
+            return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+        }
+
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 

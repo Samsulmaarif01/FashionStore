@@ -90,6 +90,41 @@ class MemberController extends Controller
         if ($order->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
+
+        if ($order->payment_method === 'xendit' || $order->status === 'pending') {
+            try {
+                \Xendit\Configuration::setXenditKey(env('XENDIT_SECRET_KEY'));
+                $apiInstance = new \Xendit\Invoice\InvoiceApi();
+                $invoices = $apiInstance->getInvoices(null, $order->order_number);
+                
+                if (!empty($invoices) && count($invoices) > 0) {
+                    $invoice = $invoices[0];
+                    $status = method_exists($invoice, 'getStatus') ? $invoice->getStatus() : ($invoice['status'] ?? null);
+                    $paymentMethod = method_exists($invoice, 'getPaymentMethod') ? $invoice->getPaymentMethod() : ($invoice['payment_method'] ?? null);
+                    $paymentChannel = method_exists($invoice, 'getPaymentChannel') ? $invoice->getPaymentChannel() : ($invoice['payment_channel'] ?? null);
+                    
+                    if ($status === 'PAID' || $status === 'SETTLED') {
+                        $order->update([
+                            'status' => 'processing',
+                            'paid_at' => $order->paid_at ?? now(),
+                            'payment_method' => $paymentChannel ?? $paymentMethod ?? 'xendit',
+                        ]);
+                    } elseif ($status === 'EXPIRED') {
+                        $order->update([
+                            'status' => 'cancelled',
+                            'cancel_reason' => 'Invoice expired',
+                        ]);
+                    } elseif ($paymentMethod || $paymentChannel) {
+                        $order->update([
+                            'payment_method' => $paymentChannel ?? $paymentMethod
+                        ]);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Ignore API errors
+            }
+        }
+
         $order->load(['items.product', 'user']);
         return view('member.invoice', compact('order'));
     }

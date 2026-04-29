@@ -1,6 +1,12 @@
 @php $title = 'Laporan Penjualan & Analytics' @endphp
 
 <x-admin-layout :title="$title">
+    <style>
+        .btn-export-csv { background-color: #16a34a !important; transition: all 0.2s; }
+        .btn-export-csv:hover { background-color: #15803d !important; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .btn-export-pdf:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+    </style>
+
     <!-- Date Filter -->
     <div class="bg-white border border-gray-100 p-5 shadow-sm rounded-2xl mb-8">
         <form method="GET" class="flex flex-wrap items-end gap-4">
@@ -15,13 +21,29 @@
                     class="px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-black focus:border-transparent">
             </div>
             <button type="submit"
-                class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors rounded-xl">
+                class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all hover:-translate-y-0.5 rounded-xl">
                 Filter
             </button>
             <a href="{{ route('admin.analytics') }}"
-                class="px-6 py-2.5 border border-gray-200 text-gray-700 text-xs font-bold uppercase tracking-widest hover:border-black transition-colors rounded-xl">
+                class="px-6 py-2.5 border border-gray-200 text-gray-700 text-xs font-bold uppercase tracking-widest hover:border-black hover:-translate-y-0.5 transition-all rounded-xl">
                 Reset
             </a>
+            <div class="flex items-center gap-3 ms-auto">
+                <a href="{{ route('admin.analytics.export.csv', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                    class="btn-export-csv px-4 py-2.5 text-white text-xs font-bold uppercase tracking-widest rounded-xl inline-flex items-center gap-2 shadow-sm active:scale-95">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l4 4m-4-4V4"/>
+                    </svg>
+                    CSV
+                </a>
+                <a href="{{ route('admin.analytics.export.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                    class="btn-export-pdf px-4 py-2.5 bg-red-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-red-700 transition-all rounded-xl inline-flex items-center gap-2 shadow-sm active:scale-95">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/>
+                    </svg>
+                    PDF
+                </a>
+            </div>
         </form>
     </div>
 

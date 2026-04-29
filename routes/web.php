@@ -149,6 +149,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Analytics & Reports
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
+    Route::get('/analytics/export/csv', [AdminController::class, 'exportCSV'])->name('analytics.export.csv');
+    Route::get('/analytics/export/pdf', [AdminController::class, 'exportPDF'])->name('analytics.export.pdf');
 
     // Categories
     Route::get('/categories', [AdminController::class, 'categories'])->name('categories');

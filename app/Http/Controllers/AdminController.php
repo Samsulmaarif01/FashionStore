@@ -373,6 +373,72 @@ class AdminController extends Controller
         ));
     }
 
+    public function exportCSV(Request $request)
+    {
+        $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+
+        $orders = Order::with('user', 'items.product')
+            ->whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+
+        $filename = 'laporan_penjualan_' . $startDate . '_' . $endDate . '.csv';
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        $output = fopen('php://output', 'w');
+
+        // Header CSV
+        fputcsv($output, ['Order Number', 'Tanggal', 'Customer', 'Email', 'Total Amount', 'Status', 'Items']);
+
+        // Data rows
+        foreach ($orders as $order) {
+            $items = $order->items->map(function($item) {
+                return $item->product->name . ' (qty: ' . $item->quantity . ')';
+            })->implode(', ');
+
+            fputcsv($output, [
+                $order->order_number,
+                $order->created_at->format('d-m-Y H:i'),
+                $order->user->name,
+                $order->user->email,
+                $order->total_amount,
+                $order->status,
+                $items
+            ]);
+        }
+
+        fclose($output);
+        exit;
+    }
+
+    public function exportPDF(Request $request)
+    {
+        $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+
+        $totalSales = Order::whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total_amount');
+
+        $totalOrders = Order::whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+
+        $orders = Order::with('user', 'items.product')
+            ->whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.analytics_pdf', compact(
+            'startDate', 'endDate', 'totalSales', 'totalOrders', 'orders'
+        ));
+
+        return $pdf->download('laporan_penjualan_' . $startDate . '_' . $endDate . '.pdf');
+    }
+
     // ── Categories CRUD ────────────────────────────────────────────────
 
     public function categories()

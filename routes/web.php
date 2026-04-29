@@ -147,6 +147,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/about', [AdminController::class, 'editAbout'])->name('about.edit');
     Route::patch('/about', [AdminController::class, 'updateAbout'])->name('about.update');
 
+    // Analytics & Reports
+    Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
+
     // Categories
     Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
     Route::post('/categories', [AdminController::class, 'storeCategory'])->name('categories.store');

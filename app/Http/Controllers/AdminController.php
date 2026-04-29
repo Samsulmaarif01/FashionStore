@@ -10,10 +10,11 @@ use App\Models\User;
 use App\Models\Inbox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use DB;
 
 class AdminController extends Controller
 {
-    // ── Dashboard ─────────────────────────────────────────────────────────────
+    // ── Dashboard ─────────────────────────────────────────────────────
 
     public function dashboard()
     {
@@ -27,7 +28,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('totalProducts', 'totalOrders', 'totalMembers', 'totalMessages', 'recentOrders', 'recentMessages'));
     }
 
-    // ── Products CRUD ─────────────────────────────────────────────────────────
+    // ── Products CRUD ─────────────────────────────────────────────────
 
     public function products()
     {
@@ -142,7 +143,7 @@ class AdminController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus.');
     }
 
-    // ── Orders ────────────────────────────────────────────────────────────────
+    // ── Orders ────────────────────────────────────────────────────────
 
     public function orders()
     {
@@ -162,7 +163,7 @@ class AdminController extends Controller
             'status' => ['required', 'string', 'in:pending,processing,shipped,completed,cancelled'],
             'cancel_reason' => ['nullable', 'string', 'max:500']
         ]);
-        
+
         $data = ['status' => $request->status];
 
         if ($request->status === 'shipped') {
@@ -171,7 +172,7 @@ class AdminController extends Controller
             $data['completed_at'] = now();
         } elseif ($request->status === 'cancelled') {
             $data['cancel_reason'] = $request->cancel_reason;
-            
+
             if ($order->paid_at) {
                 Inbox::create([
                     'user_id' => $order->user_id,
@@ -188,7 +189,7 @@ class AdminController extends Controller
     public function destroyOrder(Order $order)
     {
         $isPaid = $order->paid_at || in_array($order->status, ['processing', 'shipped', 'completed']);
-        
+
         // Block deletion if paid and NOT completed/cancelled
         if ($isPaid && !in_array($order->status, ['completed', 'cancelled'])) {
             return back()->with('error', 'Pesanan yang sudah dibayar dan masih aktif (diproses/dikirim) tidak bisa dihapus.');
@@ -206,7 +207,7 @@ class AdminController extends Controller
         return back()->with('success', 'Riwayat pesanan berhasil dihapus.');
     }
 
-    // ── Members ───────────────────────────────────────────────────────────────
+    // ── Members ───────────────────────────────────────────────────────
 
     public function members()
     {
@@ -214,7 +215,7 @@ class AdminController extends Controller
         return view('admin.members', compact('members'));
     }
 
-    // ── About Us ──────────────────────────────────────────────────────────────
+    // ── About Us ──────────────────────────────────────────────────────
 
     public function editAbout()
     {
@@ -242,8 +243,104 @@ class AdminController extends Controller
         return back()->with('success', 'Konten Tentang Kami berhasil diperbarui.');
     }
 
-    // ── Categories CRUD ────────────────────────────────────────────────────────
-    
+    // ── Analytics & Reports ────────────────────────────────────────────
+
+    public function analytics(Request $request)
+    {
+        // Date range filter
+        $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+
+        // Sales summary
+        $totalSales = Order::whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total_amount');
+
+        $totalOrders = Order::whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+
+        $avgOrderValue = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
+
+        $cancelledOrders = Order::where('status', 'cancelled')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+
+        // Daily sales for chart
+        $dailySales = Order::whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("DATE(created_at) as date, SUM(total_amount) as total")
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Monthly sales for chart (SQLite compatible)
+        $monthlyData = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $monthlyData[$i] = ['month' => $i, 'total' => 0, 'count' => 0];
+        }
+
+        $monthlyResults = DB::table('orders')
+            ->whereIn('status', ['processing', 'shipped', 'completed'])
+            ->whereRaw("strftime('%Y', created_at) = ?", [now()->year])
+            ->selectRaw("CAST(strftime('%m', created_at) AS INTEGER) as month, SUM(total_amount) as total, COUNT(*) as count")
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        foreach ($monthlyResults as $result) {
+            $monthlyData[$result->month] = ['month' => (int)$result->month, 'total' => $result->total, 'count' => $result->count];
+        }
+
+        $monthlySales = collect(array_values($monthlyData));
+
+        // Top selling products
+        $topProducts = DB::table('order_items')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->whereIn('orders.status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->selectRaw('products.name, products.id, SUM(order_items.quantity) as total_sold, SUM(order_items.quantity * order_items.price) as revenue')
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_sold')
+            ->limit(10)
+            ->get();
+
+        // Sales by category
+        $salesByCategory = DB::table('order_items')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->whereIn('orders.status', ['processing', 'shipped', 'completed'])
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->selectRaw('categories.name, SUM(order_items.quantity * order_items.price) as revenue')
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('revenue')
+            ->get();
+
+        // Order status distribution
+        $orderStatuses = Order::whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        // Recent completed orders
+        $recentCompletedOrders = Order::with('user')
+            ->where('status', 'completed')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('admin.analytics', compact(
+            'totalSales', 'totalOrders', 'avgOrderValue', 'cancelledOrders',
+            'dailySales', 'monthlySales', 'topProducts', 'salesByCategory',
+            'orderStatuses', 'recentCompletedOrders', 'startDate', 'endDate'
+        ));
+    }
+
+    // ── Categories CRUD ────────────────────────────────────────────────
+
     public function categories()
     {
         $categories = Category::withCount('products')->latest()->get();

@@ -112,7 +112,7 @@
 
         <!-- Monthly Sales Chart -->
         <div class="bg-white border border-gray-100 p-6 shadow-sm rounded-2xl">
-            <h3 class="text-xs font-black uppercase tracking-wider text-black mb-6">Penjualan Bulanan ({{ now()->year }})</h3>
+            <h3 class="text-xs font-black uppercase tracking-wider text-black mb-6">Penjualan Bulanan ({{ $currentYear }})</h3>
             <div class="relative" style="height: 200px;">
                 <canvas id="monthlySalesChart"></canvas>
             </div>
@@ -366,11 +366,11 @@
         // Monthly Sales Chart
         const monthlyCtx = document.getElementById('monthlySalesChart').getContext('2d');
         const monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-        const monthlyRevenue = @json($monthlySales->pluck('total', 'month'));
-        const monthlyOrderCount = @json($monthlySales->pluck('count', 'month'));
-
-        const monthlyData = monthlyLabels.map((_, i) => monthlyRevenue[i + 1] || 0);
-        const monthlyCount = monthlyLabels.map((_, i) => monthlyOrderCount[i + 1] || 0);
+        
+        // monthlySales is a 0-indexed array of {month, total, count} for months 1-12
+        const monthlySalesRaw = @json($monthlySales->values());
+        const monthlyData = monthlySalesRaw.map(m => parseFloat(m.total) || 0);
+        const monthlyCount = monthlySalesRaw.map(m => parseInt(m.count) || 0);
 
         const monthlySalesChart = new Chart(monthlyCtx, {
             type: 'bar',

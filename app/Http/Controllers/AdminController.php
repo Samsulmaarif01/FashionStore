@@ -296,34 +296,34 @@ class AdminController extends Controller
         
         switch ($filter) {
             case 'today':
-                $startDate = now()->toDateString();
-                $endDate = now()->toDateString();
+                $startDate = now()->startOfDay()->format('Y-m-d H:i:s');
+                $endDate   = now()->endOfDay()->format('Y-m-d H:i:s');
                 break;
             case 'week':
-                $startDate = now()->startOfWeek()->toDateString();
-                $endDate = now()->endOfWeek()->toDateString();
+                $startDate = now()->startOfWeek()->startOfDay()->format('Y-m-d H:i:s');
+                $endDate   = now()->endOfWeek()->endOfDay()->format('Y-m-d H:i:s');
                 break;
             case 'month':
-                $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
-                $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+                $startDate = now()->startOfMonth()->startOfDay()->format('Y-m-d H:i:s');
+                $endDate   = now()->endOfMonth()->endOfDay()->format('Y-m-d H:i:s');
                 break;
             case 'year':
-                $startDate = now()->startOfYear()->toDateString();
-                $endDate = now()->endOfYear()->toDateString();
+                $startDate = now()->startOfYear()->startOfDay()->format('Y-m-d H:i:s');
+                $endDate   = now()->endOfYear()->endOfDay()->format('Y-m-d H:i:s');
                 break;
             case 'all':
                 $startDate = null;
-                $endDate = null;
+                $endDate   = null;
                 break;
             default:
-                $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
-                $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+                $startDate = now()->startOfMonth()->startOfDay()->format('Y-m-d H:i:s');
+                $endDate   = now()->endOfMonth()->endOfDay()->format('Y-m-d H:i:s');
         }
 
-        // Override with explicit date range if provided
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $startDate = $request->get('start_date');
-            $endDate = $request->get('end_date');
+        // Override with explicit date range if provided via form
+        if ($request->has('start_date') && $request->has('end_date') && $filter === 'month') {
+            $startDate = $request->get('start_date') . ' 00:00:00';
+            $endDate   = $request->get('end_date')   . ' 23:59:59';
         }
 
         // Sales summary
@@ -357,7 +357,11 @@ class AdminController extends Controller
             ->orderBy('date')
             ->get();
 
-        // Monthly sales for chart (SQLite compatible)
+        // Monthly sales for chart — always current year, regardless of active date filter
+        $currentYear = now()->year;
+        $yearStart = now()->startOfYear()->format('Y-m-d H:i:s');
+        $yearEnd   = now()->endOfYear()->format('Y-m-d H:i:s');
+
         $monthlyData = [];
         for ($i = 1; $i <= 12; $i++) {
             $monthlyData[$i] = ['month' => $i, 'total' => 0, 'count' => 0];
@@ -365,14 +369,14 @@ class AdminController extends Controller
 
         $monthlyResults = DB::table('orders')
             ->whereIn('status', ['processing', 'shipped', 'completed'])
-            ->whereRaw("strftime('%Y', created_at) = ?", [now()->year])
+            ->whereBetween('created_at', [$yearStart, $yearEnd])
             ->selectRaw("CAST(strftime('%m', created_at) AS INTEGER) as month, SUM(total_amount) as total, COUNT(*) as count")
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
         foreach ($monthlyResults as $result) {
-            $monthlyData[$result->month] = ['month' => (int)$result->month, 'total' => $result->total, 'count' => $result->count];
+            $monthlyData[$result->month] = ['month' => (int)$result->month, 'total' => (float)$result->total, 'count' => (int)$result->count];
         }
 
         $monthlySales = collect(array_values($monthlyData));
@@ -455,7 +459,7 @@ class AdminController extends Controller
             'totalSales', 'totalOrders', 'avgOrderValue', 'cancelledOrders',
             'dailySales', 'monthlySales', 'topProducts', 'salesByCategory',
             'orderStatuses', 'recentCompletedOrders', 'startDate', 'endDate',
-            'page', 'totalPages', 'perPage', 'filter', 'ordersPaginated'
+            'page', 'totalPages', 'perPage', 'filter', 'ordersPaginated', 'currentYear'
         ));
     }
 

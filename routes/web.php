@@ -137,6 +137,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Orders
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
     Route::get('/orders/{order}/invoice', [AdminController::class, 'printInvoice'])->name('orders.invoice');
+    Route::get('/orders/{order}/invoice/download', [AdminController::class, 'downloadInvoice'])->name('orders.invoice.download');
     Route::patch('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.status');
     Route::delete('/orders/{order}', [AdminController::class, 'destroyOrder'])->name('orders.destroy');
 

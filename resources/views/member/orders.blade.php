@@ -79,7 +79,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right space-y-3">
                                     <a href="{{ route('member.orders.invoice', $order) }}" target="_blank" class="block text-black hover:text-indigo-600 transition-colors font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">
-                                        Cetak Invoice
+                                        Download Invoice
                                     </a>
                                     
                                     @if($order->status === 'pending')

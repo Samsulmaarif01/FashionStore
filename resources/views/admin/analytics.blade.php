@@ -9,34 +9,53 @@
 
     <!-- Date Filter -->
     <div class="bg-white border border-gray-100 p-5 shadow-sm rounded-2xl mb-8">
-        <form method="GET" class="flex flex-wrap items-end gap-4">
-            <div>
-                <label class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2">Tanggal Mulai</label>
-                <input type="date" name="start_date" value="{{ $startDate }}"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-black focus:border-transparent">
+        <div class="flex flex-wrap items-end gap-4">
+            <!-- Quick Filters -->
+            <div class="flex flex-wrap gap-2">
+                @php
+                    $filters = [
+                        'today' => 'Hari Ini',
+                        'week' => 'Minggu Ini',
+                        'month' => 'Bulan Ini',
+                        'year' => 'Tahun Ini',
+                        'all' => 'Semua'
+                    ];
+                @endphp
+                @foreach($filters as $key => $label)
+                    <a href="{{ route('admin.analytics', ['filter' => $key]) }}"
+                        class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-xl transition-all hover:-translate-y-0.5
+                        {{ ($filter ?? 'month') === $key ? 'bg-black text-white' : 'border border-gray-200 text-gray-700 hover:border-black' }}">
+                        {{ $label }}
+                    </a>
+                @endforeach
             </div>
-            <div>
-                <label class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2">Tanggal Akhir</label>
-                <input type="date" name="end_date" value="{{ $endDate }}"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-black focus:border-transparent">
-            </div>
-            <button type="submit"
-                class="px-6 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all hover:-translate-y-0.5 rounded-xl">
-                Filter
-            </button>
-            <a href="{{ route('admin.analytics') }}"
-                class="px-6 py-2.5 border border-gray-200 text-gray-700 text-xs font-bold uppercase tracking-widest hover:border-black hover:-translate-y-0.5 transition-all rounded-xl">
-                Reset
-            </a>
+            
+            <!-- Custom Date Range -->
+            <form method="GET" class="flex flex-wrap items-end gap-3">
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2">Mulai</label>
+                    <input type="date" name="start_date" value="{{ $startDate }}"
+                        class="px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-black focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2">Akhir</label>
+                    <input type="date" name="end_date" value="{{ $endDate }}"
+                        class="px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-black focus:border-transparent">
+                </div>
+                <button type="submit"
+                    class="px-4 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all hover:-translate-y-0.5 rounded-xl">
+                    Filter
+                </button>
+            </form>
             <div class="flex items-center gap-3 ms-auto">
-                <a href="{{ route('admin.analytics.export.csv', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                <a href="{{ route('admin.analytics.export.csv', ['start_date' => $startDate ?? '', 'end_date' => $endDate ?? '']) }}"
                     class="btn-export-csv px-4 py-2.5 text-white text-xs font-bold uppercase tracking-widest rounded-xl inline-flex items-center gap-2 shadow-sm active:scale-95">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l4 4m-4-4V4"/>
                     </svg>
                     CSV
                 </a>
-                <a href="{{ route('admin.analytics.export.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                <a href="{{ route('admin.analytics.export.pdf', ['start_date' => $startDate ?? '', 'end_date' => $endDate ?? '']) }}"
                     class="btn-export-pdf px-4 py-2.5 bg-red-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-red-700 transition-all rounded-xl inline-flex items-center gap-2 shadow-sm active:scale-95">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/>
@@ -44,7 +63,7 @@
                     PDF
                 </a>
             </div>
-        </form>
+        </div>
     </div>
 
     <!-- Summary Cards -->
@@ -116,6 +135,112 @@
         </div>
     </div>
 
+    <!-- Orders Table -->
+    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-xs font-black uppercase tracking-wider text-black">Data Penjualan</h3>
+            <span class="text-xs text-gray-500">{{ $ordersPaginated->total() }} pesanan</span>
+        </div>
+        @if($ordersPaginated->isEmpty())
+            <div class="py-12 text-center">
+                <p class="text-gray-400 text-sm">Belum ada data pesanan.</p>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 text-[10px] font-black uppercase tracking-wider text-gray-500">
+                        <tr>
+                            <th class="px-6 py-3 text-left">No. Pesanan</th>
+                            <th class="px-6 py-3 text-left">Customer</th>
+                            <th class="px-6 py-3 text-left">Status</th>
+                            <th class="px-6 py-3 text-right">Total</th>
+                            <th class="px-6 py-3 text-left">Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @foreach ($ordersPaginated as $order)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <span class="font-mono text-[10px] font-bold text-indigo-600">{{ $order->order_number }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <p class="font-bold text-black text-xs">{{ $order->user->name ?? '-' }}</p>
+                                    <p class="text-[10px] text-gray-400">{{ $order->user->email ?? '-' }}</p>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @php
+                                        $statusColors = [
+                                            'pending' => 'bg-yellow-100 text-yellow-700',
+                                            'processing' => 'bg-blue-100 text-blue-700',
+                                            'shipped' => 'bg-purple-100 text-purple-700',
+                                            'completed' => 'bg-green-100 text-green-700',
+                                            'cancelled' => 'bg-red-100 text-red-700',
+                                        ];
+                                        $statusLabels = [
+                                            'pending' => 'Menunggu',
+                                            'processing' => 'Diproses',
+                                            'shipped' => 'Dikirim',
+                                            'completed' => 'Selesai',
+                                            'cancelled' => 'Dibatalkan',
+                                        ];
+                                    @endphp
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold {{ $statusColors[$order->status] ?? 'bg-gray-100 text-gray-700' }}">
+                                        {{ $statusLabels[$order->status] ?? $order->status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="font-bold text-black text-xs">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-xs text-gray-500">{{ $order->created_at->format('d M Y H:i') }}</span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination -->
+            @if($ordersPaginated->total() > 0)
+                <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Halaman {{ $ordersPaginated->currentPage() }} dari {{ $ordersPaginated->lastPage() }}</span>
+                    <div class="flex gap-2">
+                        @if(!$ordersPaginated->onFirstPage())
+                            <a href="{{ $ordersPaginated->appends(request()->query())->previousPageUrl() }}" class="px-3 py-1.5 text-xs font-bold border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors flex items-center gap-1">
+                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                                Prev
+                            </a>
+                        @else
+                            <span class="px-3 py-1.5 text-xs font-bold border border-gray-100 text-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                                Prev
+                            </span>
+                        @endif
+                        
+                        @if($ordersPaginated->hasMorePages())
+                            <a href="{{ $ordersPaginated->appends(request()->query())->nextPageUrl() }}" class="px-3 py-1.5 text-xs font-bold border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors flex items-center gap-1">
+                                Next
+                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        @else
+                            <span class="px-3 py-1.5 text-xs font-bold border border-gray-100 text-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                                Next
+                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            @endif
+        @endif
+    </div>
+
     <!-- Top Selling Products & Recent Orders -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <!-- Top Products -->
@@ -148,6 +273,19 @@
                         </tbody>
                     </table>
                 </div>
+                @if($totalPages > 1)
+                <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Halaman {{ $page }} dari {{ $totalPages }}</span>
+                    <div class="flex gap-2">
+                        @if($page > 1)
+                            <a href="{{ request()->fullUrlWithQuery(['page' => $page - 1]) }}" class="px-3 py-1.5 text-xs font-bold border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors">Prev</a>
+                        @endif
+                        @if($page < $totalPages)
+                            <a href="{{ request()->fullUrlWithQuery(['page' => $page + 1]) }}" class="px-3 py-1.5 text-xs font-bold border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors">Next</a>
+                        @endif
+                    </div>
+                </div>
+                @endif
             @endif
         </div>
 

@@ -126,7 +126,9 @@ class MemberController extends Controller
         }
 
         $order->load(['items.product', 'user']);
-        return view('member.invoice', compact('order'));
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('member.invoice', ['order' => $order, 'is_pdf' => true]);
+        $pdf->setPaper('a4', 'portrait');
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
     }
 
     public function cancelOrder(Request $request, Order $order)

@@ -191,6 +191,16 @@ class AdminController extends Controller
         return view('member.invoice', compact('order'));
     }
 
+    public function downloadInvoice(Order $order)
+    {
+        $order->load(['items.product', 'user']);
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('member.invoice', ['order' => $order, 'is_pdf' => true]);
+        $pdf->setPaper('a4', 'portrait');
+        
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
+    }
+
     public function updateOrderStatus(Request $request, Order $order)
     {
         $request->validate([
@@ -281,29 +291,68 @@ class AdminController extends Controller
 
     public function analytics(Request $request)
     {
-        // Date range filter
-        $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
-        $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+        // Quick filter buttons
+        $filter = $request->get('filter', 'month');
+        
+        switch ($filter) {
+            case 'today':
+                $startDate = now()->toDateString();
+                $endDate = now()->toDateString();
+                break;
+            case 'week':
+                $startDate = now()->startOfWeek()->toDateString();
+                $endDate = now()->endOfWeek()->toDateString();
+                break;
+            case 'month':
+                $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
+                $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+                break;
+            case 'year':
+                $startDate = now()->startOfYear()->toDateString();
+                $endDate = now()->endOfYear()->toDateString();
+                break;
+            case 'all':
+                $startDate = null;
+                $endDate = null;
+                break;
+            default:
+                $startDate = $request->get('start_date', now()->startOfMonth()->toDateString());
+                $endDate = $request->get('end_date', now()->endOfMonth()->toDateString());
+        }
+
+        // Override with explicit date range if provided
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $startDate = $request->get('start_date');
+            $endDate = $request->get('end_date');
+        }
 
         // Sales summary
-        $totalSales = Order::whereIn('status', ['processing', 'shipped', 'completed'])
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum('total_amount');
+        $salesQuery = Order::whereIn('status', ['processing', 'shipped', 'completed']);
+        if ($startDate && $endDate) {
+            $salesQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $totalSales = $salesQuery->sum('total_amount');
 
-        $totalOrders = Order::whereIn('status', ['processing', 'shipped', 'completed'])
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->count();
+        $ordersCountQuery = Order::whereIn('status', ['processing', 'shipped', 'completed']);
+        if ($startDate && $endDate) {
+            $ordersCountQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $totalOrders = $ordersCountQuery->count();
 
         $avgOrderValue = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
 
-        $cancelledOrders = Order::where('status', 'cancelled')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->count();
+        $cancelledQuery = Order::where('status', 'cancelled');
+        if ($startDate && $endDate) {
+            $cancelledQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $cancelledOrders = $cancelledQuery->count();
 
         // Daily sales for chart
-        $dailySales = Order::whereIn('status', ['processing', 'shipped', 'completed'])
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw("DATE(created_at) as date, SUM(total_amount) as total")
+        $dailySalesQuery = Order::whereIn('status', ['processing', 'shipped', 'completed']);
+        if ($startDate && $endDate) {
+            $dailySalesQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $dailySales = $dailySalesQuery->selectRaw("DATE(created_at) as date, SUM(total_amount) as total")
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -328,32 +377,56 @@ class AdminController extends Controller
 
         $monthlySales = collect(array_values($monthlyData));
 
-        // Top selling products
-        $topProducts = DB::table('order_items')
+        // Top selling products with pagination
+        $perPage = 5;
+        $page = (int) $request->get('page', 1);
+        $page = max(1, $page);
+
+        $topProductsQuery = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->whereIn('orders.status', ['processing', 'shipped', 'completed'])
-            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->whereIn('orders.status', ['processing', 'shipped', 'completed']);
+        
+        if ($startDate && $endDate) {
+            $topProductsQuery->whereBetween('orders.created_at', [$startDate, $endDate]);
+        }
+        
+        $allTopProducts = $topProductsQuery
             ->selectRaw('products.name, products.id, SUM(order_items.quantity) as total_sold, SUM(order_items.quantity * order_items.price) as revenue')
             ->groupBy('products.id', 'products.name')
             ->orderByDesc('total_sold')
-            ->limit(10)
             ->get();
 
+        $totalProducts = $allTopProducts->count();
+        $totalPages = ceil($totalProducts / $perPage);
+        $page = min($page, max(1, $totalPages));
+        $offset = ($page - 1) * $perPage;
+
+        $topProducts = $allTopProducts->slice($offset, $perPage)->values();
+
         // Sales by category
-        $salesByCategory = DB::table('order_items')
+        $salesByCategoryQuery = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->whereIn('orders.status', ['processing', 'shipped', 'completed'])
-            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->whereIn('orders.status', ['processing', 'shipped', 'completed']);
+        
+        if ($startDate && $endDate) {
+            $salesByCategoryQuery->whereBetween('orders.created_at', [$startDate, $endDate]);
+        }
+        
+        $salesByCategory = $salesByCategoryQuery
             ->selectRaw('categories.name, SUM(order_items.quantity * order_items.price) as revenue')
             ->groupBy('categories.id', 'categories.name')
             ->orderByDesc('revenue')
             ->get();
 
         // Order status distribution
-        $orderStatuses = Order::whereBetween('created_at', [$startDate, $endDate])
+        $orderStatusesQuery = Order::query();
+        if ($startDate && $endDate) {
+            $orderStatusesQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $orderStatuses = $orderStatusesQuery
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
@@ -366,10 +439,23 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
+        // Orders table with pagination
+        $ordersPage = (int) $request->get('orders_page', 1);
+        $ordersPerPage = 10;
+        
+        $ordersQuery = Order::with('user')->latest();
+        
+        if ($startDate && $endDate) {
+            $ordersQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        
+        $ordersPaginated = $ordersQuery->paginate($ordersPerPage, ['*'], 'orders_page', $ordersPage);
+
         return view('admin.analytics', compact(
             'totalSales', 'totalOrders', 'avgOrderValue', 'cancelledOrders',
             'dailySales', 'monthlySales', 'topProducts', 'salesByCategory',
-            'orderStatuses', 'recentCompletedOrders', 'startDate', 'endDate'
+            'orderStatuses', 'recentCompletedOrders', 'startDate', 'endDate',
+            'page', 'totalPages', 'perPage', 'filter', 'ordersPaginated'
         ));
     }
 
